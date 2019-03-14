@@ -1,17 +1,263 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>first</title>
-	<style type="text/css">
-		{% load static %}
-		body {
-			background-image: url("{% static "/img/6.jpg" %}");
-		}
-	</style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-asudfhbuszhdfishbif
+{% block title %}欢迎光临首页{% endblock %}
 
-</body>
-</html>
+{% block content %}
+{% load static %}
+<style type="text/css">
+    .navbar-default{
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+    }
+    #logo{
+        margin-left: 30px;
+        height: 90%;
+        width: 70%;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:link{
+        font-size: 120%;
+        color: #FFFFFF;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:visited{
+        color: #FFFFFF;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:hover {
+        color: #46d233;
+    }
+    #inputSearch{
+
+    }
+    #inputSearch input, #inputSearch select{
+        border: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: none;
+        border-radius: 0;
+        color: #FFFFFF;
+    }
+    #inputSearch select{
+        cursor: pointer;
+    }
+    #inputSearch select option{
+        color: #919191;
+        background-color: #FFFFFF;
+    }
+    .glyphicon-search{
+        font-size: 150%;
+        color: #FFFFFF;
+        cursor:pointer;
+        padding: 7px 0px 7px 5px;
+
+    }
+    .glyphicon-bell{
+        font-size: 150%;
+        color: #FFFFFF;
+        cursor:pointer;
+        margin-left: 15px;
+    }
+    .img-circle{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .dropdown-menu {
+        min-width:100px;
+    }
+    .dropdown-menu li a:hover{
+        background-color: inherit;
+        color: #46d233;
+    }
+    .navbar-nav li{
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+    #register{
+        background-color: #46d233;
+        color: #FFFFFF;
+        margin: 9px 15px 0 0;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    .item {
+        height: 480px;
+        max-height: 480px;
+    }
+    .imgRow{
+        display: inline-block;
+        width: 90%;
+        border: red solid;
+    }
+    .imgCard{
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border: green solid;
+        text-align: center;
+    }
+
+</style>
+<div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img id="logo" src="{% static '/img/icon1.png' %}">
+                </a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">动态</a></li>
+                    <li><a href="#">APP</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form class="navbar-form" role="search" >
+                            <div class="input-group">
+                                <p id="inputSearch">
+                                    <select class="form-control">
+                                        <option value="volvo">volvo</option>
+                                        <option value="saab">saab</option>
+                                        <option value="opel">opel</option>
+                                    </select>
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </p>
+                                <span class="glyphicon glyphicon-search input-group-btn"></span>
+                            </div>
+                        </form>
+                    </li>
+                    {% if logined %}
+                    <li class="dropdown">
+                        <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-bell"></span>
+                        </p>
+                        <ul class="dropdown-menu dropdown-menu-left">
+                            <li><a href="#">jmeter</a></li>
+                            <li><a href="#">EJB</a></li>
+                            <li><a href="#">Jasper</a></li>
+                            <li><a href="#">dhdhh</a></li>                            <li><a href="#">hgdh</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
+                            <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-left">
+                            <li><a href="#">jmeter</a></li>
+                            <li><a href="#">EJB</a></li>
+                            <li><a href="#">Jasper</a></li>
+                            <li><a href="#">dhdhh</a></li>
+                            <li><a href="#">hgdh</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">发布</a></li>
+                    {% else %}
+                    <li><a id="login" href="#">登录</a></li>
+                    <li><a id="register" href="#">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="myCarousel" class="carousel slide" >
+        <div class="carousel-inner">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to ="0" class="active" ></li>
+                <li data-target="#myCarousel" data-slide-to ="1"></li>
+            </ol>
+
+            <div class="item active">
+                <a href="#">
+                    <img class="slideImg" src="{% static '/img/1.jpg' %}"
+                         alt="第一张">
+                </a>
+            </div>
+            <div class="item">
+                <a href="#">
+                    <img class="slideImg" src="{% static '/img/2.jpg' %}"
+                         alt="第二张">
+                </a>
+            </div>
+
+            <a href="#myCarousel" data-slide="next" class="carousel-control left"><!-- ‹ -->
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a><!-- 左箭头 -->
+            <a href="#myCarousel" data-slide="prev" class="carousel-control right"><!-- › -->
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a><!-- 右箭头 -->
+        </div>
+    </div>
+    <div style="text-align: center">
+        <h2>首页推荐</h2>
+    </div>
+    <div style="text-align: center;">
+        <div class="imgRow">
+            <div class="imgCard">
+                <a href="#" class="thumbnail">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="thumbnail">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="thumbnail">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="thumbnail">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#inputSearch").hide();
+        $("#myCarousel").carousel({
+            interval: 2000
+        });
+
+        ////搜索输入框样式
+        $(".glyphicon-search").click(function(event){
+            if ($("#inputSearch").is(':visible')){
+                alert("yyy");
+            }
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+            $("#inputSearch").show(200);
+        });
+        $("#inputSearch").click(function(event){
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+        });
+        document.onclick = function(){
+            $("#inputSearch").hide(200);
+        };
+
+        ////下拉菜单动画样式
+        $(".glyphicon-bell").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".img-circle").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".dropdown").mouseleave(function () {
+            $(this).children(".dropdown-menu").slideUp(200);
+        });
+    });
+</script>
+
+{% endblock %}

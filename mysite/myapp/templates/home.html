@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}欢迎光临首页{% endblock %}
+
+{% block content %}
+{% load static %}
+<style type="text/css">
+
+    .navbar-default{
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+    }
+    #logo{
+        margin-left: 30px;
+        height: 90%;
+        width: 70%;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:link{
+        font-size: 120%;
+        color: #FFFFFF;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:visited{
+        color: #FFFFFF;
+    }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:hover {
+        color: #00FF00;
+    }
+    .glyphicon-search{
+        font-size: 150%;
+        color: #FFFFFF;
+        margin-left: 15px;
+        cursor:pointer;
+    }
+    #inputSearch{
+
+    }
+    #inputSearch input, #inputSearch select{
+        border: none;
+        background-color: rgba(255, 255, 255, 0.51);
+        box-shadow: none;
+        border-radius: 0px;
+        color: #FFFFFF;
+    }
+    select{
+        cursor: pointer;
+    }
+    li{
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+    #register{
+        margin-right: 15px;
+        background-color: #ce8483;
+    }
+    #myCarousel{
+
+    }
+    .item {
+        height: 480px;
+        max-height: 480px;
+    }
+</style>
+<div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img id="logo" src="{% static '/img/icon1.png' %}">
+                </a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#">主页</a></li>
+                    <li><a href="#">页面2</a></li>
+                    <li><a href="#">页面3</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form class="navbar-form" role="search">
+                            <div class="input-group">
+                                <p id="inputSearch">
+                                    <select class="form-control">
+                                        <option value="volvo">Volvo</option>
+                                        <option value="saab">Saab</option>
+                                        <option value="opel">Opel</option>
+                                        <option value="audi">Audi</option>
+                                    </select>
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </p>
+                                <span class="glyphicon glyphicon-search input-group-btn"></span>
+                            </div>
+                        </form>
+                    </li>
+                    <li><a id="login" href="#">登录</a></li>
+                    <li><a id="register" href="#">注册</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="myCarousel" class="carousel slide" >
+
+        <div class="carousel-inner">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to ="0" class="active" ></li>
+                <li data-target="#myCarousel" data-slide-to ="1"></li>
+            </ol>
+
+            <div class="item active">
+                <a href="#">
+                    <img class="slideImg" src="{% static '/img/1.jpg' %}"
+                         alt="第一张">
+                </a>
+            </div>
+            <div class="item">
+                <a href="#">
+                    <img class="slideImg" src="{% static '/img/2.jpg' %}"
+                         alt="第二张">
+                </a>
+            </div>
+
+            <a href="#myCarousel" data-slide="next" class="carousel-control left"><!-- ‹ -->
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a><!-- 左箭头 -->
+            <a href="#myCarousel" data-slide="prev" class="carousel-control right"><!-- › -->
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a><!-- 右箭头 -->
+        </div>
+    </div>
+    <div>
+        <h1>首页推荐</h1>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#inputSearch").hide();
+        $("#myCarousel").carousel({
+            interval: 2000
+        });
+
+        $(".glyphicon-search").click(function(event){
+            if ($("#inputSearch").is(':visible')){
+                alert("yyy");
+            }
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+            $("#inputSearch").show(200);
+        });
+        $("#inputSearch").click(function(event){
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+        });
+        document.onclick = function(){
+            $("#inputSearch").hide(200);
+        };
+
+    });
+</script>
+
+{% endblock %}

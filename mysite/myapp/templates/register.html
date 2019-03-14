@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}用户注册{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    #content{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    form {
+        width:30%;
+        position: absolute;
+        top: calc(50% - 150px);
+        left: calc(50% - 15%);
+    }
+    button{
+        width:100%;
+    }
+    #loginLink{
+        float:right;
+        display:inline
+    }
+    .tip{
+        color: #AA0000;
+    }
+</style>
+<div id="content">
+    <form id="form" class="form-horizontal" role="form" action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input id="nickname" type="text" class="form-control" name="nickname" placeholder="昵称" autocomplete="off" required="required">
+        </div>
+        <div class="form-group tip"></div>
+        <div class="form-group">
+            <input id="pwd" type="password" class="form-control" name="pwd" placeholder="密码(6-16个字符，区分大小写)" autocomplete="off" required="required">
+        </div>
+        <div class="form-group tip"></div>
+        <div class="form-group">
+            <input id="phone" type="text" class="form-control" name="phone" placeholder="常用手机号" autocomplete="off" required="required">
+        </div>
+        <div class="form-group tip"></div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" >注册</button>
+        </div>
+        <div class="form-group">
+            <a id="loginLink" href="{% url 'login' %}">已有账号，直接登录</a>
+        </div>
+    </form>
+</div>
+<script>
+
+    ////验证字符串是否是数字
+    function checkNumber(theObj) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(theObj)) {
+            return true;
+        }
+        return false;
+    }
+    /////开始
+    $(document).ready(function() {
+        var suceed = new Array(false,false,false);
+        $("button").click(function(){
+            if(suceed[0] && suceed[1] && suceed[2])
+                $("#form").submit();
+            else
+                return false;
+        });
+        $("#nickname").blur(function () {
+            var val = $("#nickname").val();
+            if(val == "" || val == null)
+                return;
+            $.ajax({ url: "register/",  type:'GET',async:false,
+                data: {"field":"nickname","nickname":val},
+                success: function(data){
+                var ret = JSON.parse(data)['msg'];
+                if(ret == "f"){
+                    $(".tip")[0].innerText = "昵称已被取用";
+                    suceed[0] = false;
+                }else{
+                    $(".tip")[0].innerText = "";
+                    suceed[0] = true;
+                }
+            }});
+        });
+        $("#pwd").blur(function() {
+            var pwd = $("#pwd").val();
+            if(pwd.length == "" || pwd == null){
+                $(".tip")[1].innerText = "";
+                return;
+            }
+            if(pwd.length < 6 || pwd.length > 16){
+                $(".tip")[1].innerText = "密码为6-16个字符";
+                suceed[1] = false;
+            }else{
+                $(".tip")[1].innerText = "";
+                suceed[1] = true;
+            }
+        });
+        $("#phone").blur(function() {
+            var val = $(this).val();
+            if(val.length == "" || val == null){
+                $(".tip")[2].innerText = "";
+                return;
+            }
+            if(val.length != 11 || !checkNumber(val)){
+                $(".tip")[2].innerText = "请检查手机号码";
+                suceed[2] = false;
+            }else {
+                $.ajax({ url: "register/",  type:'GET',async:false,
+                    data: {"field":"phone","phone":val},
+                    success: function(data){
+                        var ret = JSON.parse(data)['msg'];
+                        if(ret == "f"){
+                            $(".tip")[2].innerText = "该手机号已经注册过";
+                            suceed[2] = false;
+                        }else{
+                            $(".tip")[2].innerText = "";
+                            suceed[2] = true;
+                        }
+                    }});
+            }
+            //"csrfmiddlewaretoken":$('[name="csrfmiddlewaretoken"]').val()
+        });
+    })
+</script>
+{% endblock %}
