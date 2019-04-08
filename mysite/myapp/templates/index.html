@@ -5,69 +5,111 @@
 {% block content %}
 {% load static %}
 <style type="text/css">
-    .navbar-default{
-        background-color: rgba(255, 255, 255, 0);
-        border: none;
+    a:hover{
+        text-decoration: none;
     }
     #logo{
         margin-left: 30px;
         height: 90%;
         width: 70%;
     }
-    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:link{
+    .navbar-default{
+        background-color: rgba(255, 255, 255, 0);
+        border: none;
+    }
+    .navbar-fixed-top.active{
+        background-color: rgba(255, 255, 255, 1);
+        transition: background 1s;
+        -moz-transition: background 1s; /* Firefox 4 */
+        -webkit-transition: background 1s; /* Safari 和 Chrome */
+        -o-transition: background 1s; /* Opera */
+    }
+    .navbar-fixed-top.active .navbar-nav > li > a:link{
+        color: #000000;
+        transition: color 1s;
+        -moz-transition: color 1s; /* Firefox 4 */
+        -webkit-transition: color 1s; /* Safari 和 Chrome */
+        -o-transition: color 1s; /* Opera */
+    }
+    .navbar-fixed-top.active .navbar-nav > li > a:visited{
+        color: #000000;
+    }
+    .navbar-fixed-top.active .navbar-nav > li > a:hover{
+        color: #46d233;
+    }
+    .navbar-fixed-top .navbar-nav > li > a:link{
         font-size: 120%;
         color: #FFFFFF;
     }
-    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:visited{
+    .navbar-fixed-top .navbar-nav > li > a:visited{
         color: #FFFFFF;
     }
-    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:hover {
+    .navbar-fixed-top .navbar-nav > li > a:hover {
         color: #46d233;
     }
-    #inputSearch{
 
-    }
-    #inputSearch input, #inputSearch select{
+    #inputSearch>input, #inputSearch>select{
         border: none;
         background-color: rgba(255, 255, 255, 0.3);
         box-shadow: none;
         border-radius: 0;
         color: #FFFFFF;
     }
+    #inputSearch.active input, #inputSearch.active select{
+        color: black;
+        background-color: rgba(0, 0, 0, 0.2);
+        transition: color 1s;
+        -moz-transition: color 1s; /* Firefox 4 */
+        -webkit-transition: color 1s; /* Safari 和 Chrome */
+        -o-transition: color 1s; /* Opera */
+    }
     #inputSearch select{
         cursor: pointer;
     }
-    #inputSearch select option{
+    #inputSearch select>option{
         color: #919191;
         background-color: #FFFFFF;
     }
-    .glyphicon-search{
+    .navbar-fixed-top .glyphicon-search{
         font-size: 150%;
         color: #FFFFFF;
         cursor:pointer;
         padding: 7px 0px 7px 5px;
-
     }
-    .glyphicon-bell{
+    .active .glyphicon-search{
+        color: black;
+        transition: color 1s;
+        -moz-transition: color 1s; /* Firefox 4 */
+        -webkit-transition: color 1s; /* Safari 和 Chrome */
+        -o-transition: color 1s; /* Opera */
+    }
+    .navbar-fixed-top .glyphicon-bell{
         font-size: 150%;
         color: #FFFFFF;
         cursor:pointer;
         margin-left: 15px;
     }
-    .img-circle{
+    .active .glyphicon-bell{
+        color: black;
+        transition: color 1s;
+        -moz-transition: color 1s; /* Firefox 4 */
+        -webkit-transition: color 1s; /* Safari 和 Chrome */
+        -o-transition: color 1s; /* Opera */
+    }
+    .navbar-fixed-top .img-circle{
         width: 30px;
         height: 30px;
         cursor: pointer;
         margin-left: 10px;
     }
-    .dropdown-menu {
+    .navbar-fixed-top .dropdown-menu {
         min-width:100px;
     }
-    .dropdown-menu li a:hover{
+    .navbar-fixed-top .dropdown-menu li a:hover{
         background-color: inherit;
         color: #46d233;
     }
-    .navbar-nav li{
+    .navbar-fixed-top .navbar-nav li{
         margin-left: 15px;
         vertical-align: middle;
     }
@@ -82,19 +124,71 @@
         height: 480px;
         max-height: 480px;
     }
+    /*-----------------------------------推荐图片卡片------------------------------------ */
     .imgRow{
         display: inline-block;
         width: 90%;
-        border: red solid;
+        text-align: justify;
+        text-align-last:justify;
+        line-height:0;
+        margin-bottom: 25px;
+
     }
     .imgCard{
         display: inline-block;
-        width: 100px;
-        height: 100px;
-        border: green solid;
-        text-align: center;
+        width: 285px;
+        height: 285px;
+        overflow: hidden;
+    }
+    .imgCard > a > img{
+        width: 285px;
+        height: 285px;
+        transform: scale(1);
+        transition: all 0.5s ease 0s;
+    }
+    .imgCard:hover > a > img{
+        transform: scale(1.1,1.1);
+        transition: all 0.5s ease 0s;
+    }
+    .imgCard:hover > .ower{
+        visibility: visible;
+    }
+    .imgTag{
+        color: #FFFFFF;
+        transform:translate(20px,-270px);
+        background-color: rgba(30, 30, 30, 0.5);
+        padding: 15px 10px 15px 10px;
+        position: absolute;
+    }
+    .ower{
+        width: 285px;
+        position: absolute;
+        transform:translate(0px,-40px);
+        cursor: pointer;
+        padding-bottom: 8px;
+        background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.5));
+        visibility: hidden;
+    }
+    .ower-left{
+        float: left;
+        margin-left: 10px;
+        color: #FFFFFF;
+    }
+    a.ower-left:link, a.ower-left:visited, a.ower-left:hover{
+        color: #FFFFFF;
+    }
+    .ower-right{
+        float: right;
+        margin-right: 10px;
+        color: #5e5e5e;
+        background-color: gainsboro;
+        padding: 8px 7px 8px 7px;
+    }
+    .ower-right > .glyphicon-thumbs-up{
+        font-size: 120%;
     }
 
+    /*-------------------------------*/
 </style>
 <div>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -106,9 +200,9 @@
             </div>
             <div>
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="#">首页</a></li>
-                    <li><a href="#">动态</a></li>
-                    <li><a href="#">APP</a></li>
+                    <li><a class="nav-elem" href="#">首页</a></li>
+                    <li><a class="nav-elem" href="#">动态</a></li>
+                    <li><a class="nav-elem" href="#">APP</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -126,16 +220,16 @@
                             </div>
                         </form>
                     </li>
-                    {% if logined %}
+                    {% if 1 %}
                     <li class="dropdown">
                         <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-bell"></span>
                         </p>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><a href="#">jmeter</a></li>
+                            <li><span><a href="#">jmeter</a><span>5</span></span></li>
                             <li><a href="#">EJB</a></li>
                             <li><a href="#">Jasper</a></li>
-                            <li><a href="#">dhdhh</a></li>                            <li><a href="#">hgdh</a></li>
+                            <li><a href="#">dhdhh</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -150,7 +244,7 @@
                             <li><a href="#">hgdh</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">发布</a></li>
+                    <li><a href="#" style="margin-right: 25px">发布</a></li>
                     {% else %}
                     <li><a id="login" href="#">登录</a></li>
                     <li><a id="register" href="#">注册</a></li>
@@ -187,36 +281,231 @@
             </a><!-- 右箭头 -->
         </div>
     </div>
-    <div style="text-align: center">
+    <div id="reco" style="text-align: center; margin-bottom: 30px;">
         <h2>首页推荐</h2>
     </div>
     <div style="text-align: center;">
         <div class="imgRow">
             <div class="imgCard">
-                <a href="#" class="thumbnail">
+                <a href="#" class="aa">
                     <img src="{% static '/img/4.jpg' %}" alt="img" >
                 </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+                <div class="imgTag">
+                    <span>标签</span>
+                </div>
             </div>
             <div class="imgCard">
-                <a href="#" class="thumbnail">
+                <a href="#" class="aa">
                     <img src="{% static '/img/4.jpg' %}" alt="img" >
                 </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
             </div>
             <div class="imgCard">
-                <a href="#" class="thumbnail">
+                <a href="#" class="aa">
                     <img src="{% static '/img/4.jpg' %}" alt="img" >
                 </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
             </div>
             <div class="imgCard">
-                <a href="#" class="thumbnail">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                <a href="#" class="aa">
+                    <img src="{% static '/img/1.jpg' %}" alt="img" >
                 </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
             </div>
         </div>
+        <div class="imgRow">
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+                <div class="imgTag">
+                    <span>标签</span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/1.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="imgRow">
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+                <div class="imgTag">
+                    <span>标签</span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+            <div class="imgCard">
+                <a href="#" class="aa">
+                    <img src="{% static '/img/1.jpg' %}" alt="img" >
+                </a>
+                <div class="ower">
+                    <a class="ower-left" href="#">
+                        <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                        <span>昵称</span>
+                    </a>
+                    <span class="ower-right">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        <span>200</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+
     </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+
+        ////顶部导航栏背景变化
+        var scroll_start = 0;
+        var startchange = $('#reco');
+        var offset = startchange.offset();
+        if (startchange.length) {
+            $(document).scroll(function () {
+                scroll_start = $(this).scrollTop();
+                if (scroll_start > offset.top - 80) {
+                    $(".navbar-fixed-top").addClass("active");
+                    $("#inputSearch").addClass("active");
+                } else {
+                    $('.navbar-fixed-top').removeClass("active");
+                    $("#inputSearch").removeClass("active");
+                }
+            });
+        }
+
+        //////////
         $("#inputSearch").hide();
         $("#myCarousel").carousel({
             interval: 2000
@@ -257,6 +546,9 @@
         $(".dropdown").mouseleave(function () {
             $(this).children(".dropdown-menu").slideUp(200);
         });
+
+        ////imgCard img
+
     });
 </script>
 
