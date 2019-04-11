@@ -56,6 +56,11 @@ def login(request):
             else:
                 raise
         except:
-           return render(request, 'login.html',
+            return render(request, 'login.html',
                          {'msg':'用户名或密码错误', 'username':val, 'pwd':pwd})
     return render(request, 'login.html')
+
+
+def user(request):
+    return render(request, 'user.html')
+

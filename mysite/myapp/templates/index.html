@@ -5,6 +5,7 @@
 {% block content %}
 {% load static %}
 <style type="text/css">
+    /*-----------------------------------navbar------------------------------------ */
     a:hover{
         text-decoration: none;
     }
@@ -120,6 +121,7 @@
         padding-top: 7px;
         padding-bottom: 7px;
     }
+    /*-----------------------------------滚动横幅------------------------------------ */
     .item {
         height: 480px;
         max-height: 480px;
@@ -190,7 +192,7 @@
 
     /*-------------------------------*/
 </style>
-<div>
+<div style="background-color: #f4f6f9">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -200,7 +202,7 @@
             </div>
             <div>
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a class="nav-elem" href="#">首页</a></li>
+                    <li><a class="nav-elem" href="{% url 'index' %}">首页</a></li>
                     <li><a class="nav-elem" href="#">动态</a></li>
                     <li><a class="nav-elem" href="#">APP</a></li>
                 </ul>
@@ -237,11 +239,10 @@
                             <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><a href="#">jmeter</a></li>
-                            <li><a href="#">EJB</a></li>
-                            <li><a href="#">Jasper</a></li>
-                            <li><a href="#">dhdhh</a></li>
-                            <li><a href="#">hgdh</a></li>
+                            <li><a href="{% url 'user' %}">个人中心</a></li>
+                            <li><a href="#">设置</a></li>
+                            <li><a href="#">消息</a></li>
+                            <li><a href="#">退出登录</a></li>
                         </ul>
                     </li>
                     <li><a href="#" style="margin-right: 25px">发布</a></li>
@@ -551,5 +552,7 @@
 
     });
 </script>
+
+{% include 'foot.html' %}
 
 {% endblock %}
