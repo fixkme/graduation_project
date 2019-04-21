@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ request.session.user_nickname }}的资料{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<style type="text/css">
+    /*-----------------------------------top  navbar------------------------------------ */
+    a:hover{
+        text-decoration: none;
+    }
+    #logo{
+        margin-left: 30px;
+        height: 90%;
+        width: 70%;
+    }
+    #topNav{
+        background-color: rgba(255, 255, 255, 1);
+        border: none;
+        margin: 0;
+    }
+    #topNav .navbar-nav > li > a:link{
+        font-size: 120%;
+        color: #000000;
+    }
+    #topNav .navbar-nav > li > a:visited{
+        color: #000000;
+    }
+    #topNav .navbar-nav > li > a:hover {
+        color: #46d233;
+    }
+    #inputSearch>input, #inputSearch>select{
+        border: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: none;
+        border-radius: 0;
+        color: #000000;
+    }
+    #inputSearch select{
+        cursor: pointer;
+    }
+    #inputSearch select>option{
+        color: #919191;
+        background-color: #ffffff;
+    }
+    #topNav .glyphicon-search{
+        font-size: 150%;
+        color: #000000;
+        cursor:pointer;
+        padding: 7px 0px 7px 5px;
+    }
+
+    #topNav .glyphicon-bell{
+        font-size: 150%;
+        color: #000000;
+        cursor:pointer;
+        margin-left: 15px;
+    }
+
+    #topNav .img-circle{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    #topNav .dropdown-menu {
+        min-width:100px;
+    }
+    #topNav .dropdown-menu li a:hover{
+        background-color: inherit;
+        color: #46d233;
+    }
+    #topNav .navbar-nav li{
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+    #register{
+        background-color: #46d233;
+        color: #000000;
+        margin: 9px 15px 0 0;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    /*-----------------------------------left  navbar------------------------------------ */
+    body{
+        background-color: #f4f6f9;
+    }
+    #leftNav{
+        background-color: #FFFFFF;
+    }
+    ul.nav-tabs{
+        width: 180px;
+        margin-top: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    ul.nav-tabs li{
+        margin: 0;
+        border-top: 1px solid #ddd;
+    }
+    ul.nav-tabs li:first-child{
+        border-top: none;
+    }
+    ul.nav-tabs li a{
+        color: black;
+        margin: 0;
+        padding: 20px 16px;
+        border-radius: 0;
+    }
+    ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover{
+        color: #fff;
+        background: #46d233;
+        border: 1px solid #46d233;
+    }
+    ul.nav-tabs li:first-child a{
+        border-radius: 4px 4px 0 0;
+    }
+    ul.nav-tabs li:last-child a{
+        border-radius: 0 0 4px 4px;
+    }
+    ul.nav-tabs.affix{
+        top: 0; /* Set the top position of pinned element */
+    }
+    /******************************* 个人资料  账号密码 隐私************************************/
+    #section-1, #section-2, #section-3{
+        background-color: #FFFFFF;
+        padding: 0 32px 16px 32px;
+    }
+    #section-1 h2, #section-2 h2,#section-3 h2{
+        padding-top: 20px;
+    }
+    #section-1 form, #section-2 form, #section-3 form{
+        width: 50%;
+    }
+    #section-1>form>div, #section-2>form>div{
+        margin-bottom: 20px;
+    }
+    #section-1>form>button, #section-2>form>button,#section-3>form>button{
+        background-color: #46d233;
+        border: none;
+    }
+    #section-1>form>button:hover, #section-2>form>button:hover,#section-3>form>button:hover{
+        background-color: #43b130;
+    }
+    #section-1>form input[value="male"], #section-1>form input[value="female"]{
+        margin-left: 30px;
+    }
+    #portrait{
+        z-index: 2;
+        position: absolute;
+        transform: translate(550px, -210px);
+        text-align: center;
+    }
+    #portrait label{
+        position: relative;
+    }
+    #btnUpload:hover{
+        cursor: pointer;
+    }
+    #imgInput{
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+    #imgPreview{
+        width: 150px;
+        height: 150px;
+    }
+
+</style>
+<nav id="topNav" class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img id="logo" src="{% static '/img/icon1.png' %}">
+            </a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a class="nav-elem" href="{% url 'index' %}">首页</a></li>
+                <li><a class="nav-elem" href="#">动态</a></li>
+                <li><a class="nav-elem" href="#">APP</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form" role="search" >
+                        <div class="input-group">
+                            <p id="inputSearch">
+                                <select class="form-control">
+                                    <option value="volvo">作品</option>
+                                    <option value="saab">用户</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="Search">
+                            </p>
+                            <span class="glyphicon glyphicon-search input-group-btn"></span>
+                        </div>
+                    </form>
+                </li>
+                {% if request.session.logined %}
+                <li class="dropdown">
+                    <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-bell"></span>
+                    </p>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="#">点赞</a></li>
+                        <li><a href="#">评论</a></li>
+                        <li><a href="#">新粉丝</a></li>
+                        <li><a href="#">收藏</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
+                        <img class="img-circle" src="{{ request.session.user_portrait }}">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="{% url 'user' %}">个人中心</a></li>
+                        <li><a href="{% url 'setting' %}">设置</a></li>
+                        <li><a href="{% url 'logout' %}">退出登录</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" style="margin-right: 25px">发布</a></li>
+                {% else %}
+                <li><a id="login" href="">登录</a></li>
+                <li><a id="register" href="">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<body data-spy="scroll" data-target="#myScrollspy">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3" id="myScrollspy">
+                <ul class="nav nav-tabs nav-stacked" id="leftNav">
+                    <li class="active"><a href="#section-1">个人资料</a></li>
+                    <li><a href="#section-2">账号密码</a></li>
+                    <li><a href="#section-3">隐私设置</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-9">
+                <div id="section-1">
+                    <center><h2>个人资料</h2 ></center>
+                    <form id="section-1-form" class="form-horizontal" role="form" action="{% url 'setting' %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            <label for="nickname">昵称</label>
+                            <input type="text" class="form-control" id="nickname"  autocomplete="off" required="required">
+                        </div>
+                        <div>
+                            <label for="signature">个人签名</label>
+                            <input type="text" class="form-control" id="signature" autocomplete="off">
+                        </div>
+                        <div>
+                            <label>性别</label><br>
+                            <input type="radio" name="gender" value="secret" /> 保密
+                            <input type="radio" name="gender" value="male" /> 男
+                            <input type="radio" name="gender" value="female" /> 女
+                        </div>
+
+                        <div id="portrait">
+                            <img id="imgPreview" src="{% static '/img/default_profile2.jpg' %}" class="img-circle">
+                            <br><br>
+                            <label for="imgInput">
+                                <input type="button" id="btnUpload" value="上传头像">
+                                <input id="imgInput" type="file" accept="image/gif,image/jpeg,image/jpg,image/png">
+                            </label>
+                        </div>
+                        <button  type="submit" name="alter_profile_submit" class="btn btn-primary">保存更改</button>
+                    </form>
+                </div>
+                <div id="section-2">
+                    <center><h2>账号密码</h2></center>
+                    <form id="section-2-form" class="form-horizontal" role="form" action="{% url 'setting' %}" method="post">
+                        {% csrf_token %}
+                        <div>
+                            <label for="oldPwd">原密码</label>
+                            <input type="password" class="form-control" id="oldPwd" autocomplete="off" required="required">
+                        </div>
+                        <div>
+                            <label for="newPwd">新密码</label>
+                            <input type="password" class="form-control" id="newPwd" autocomplete="off" required="required">
+                        </div>
+                        <div>
+                            <label for="assertPwd">确认新密码</label>
+                            <input type="password" class="form-control" id="assertPwd" autocomplete="off" required="required">
+                        </div>
+                        <button  type="submit" name="alter_pwd_submit" class="btn btn-primary">确认更改</button>
+                    </form>
+                </div>
+                <div id="section-3">
+                    <center><h2>隐私设置</h2></center>
+                    <form id="section-3-form" ole="form" action="{% url 'setting' %}" method="post">
+                        {% csrf_token %}
+                        <label>谁可以评论我的作品</label>
+                        <select class="form-control" style="margin-bottom: 20px">
+                            <option>所有人</option>
+                            <option>我关注的人</option>
+                            <option>都不允许</option>
+                        </select>
+                        <button  type="submit" name="alter_privacy_submit" class="btn btn-primary">确认更改</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+</body>
+<script>
+    $(document).ready(function(){
+
+        //页面加载完毕后加载数据
+        $.ajax({ url: "setting/",  type:'GET',async:false,
+            data: {"op":"load_form_ajax"},
+            success: function(response_data){
+                var user_data = JSON.parse(response_data);
+                $("#nickname").attr('value', user_data['user_nickname']);
+                $("#signature").attr('value', user_data['user_signature']);
+                $("#imgPreview").attr('src', user_data['user_portrait']);
+                var gender = user_data['user_gender'];
+                if (gender == 0)
+                    $(":radio")[0].checked = "checked";
+                else if (gender == 1)
+                    $(":radio")[1].checked = "checked";
+                else
+                    $(":radio")[2].checked = "checked";
+            }
+        });
+
+        //验证昵称是否唯一
+        $("#nickname").blur(function () {
+            var val = $("#nickname").val();
+            if(val == "" || val == null)
+                return;
+            $.ajax({ url: "setting/",  type:'GET',async:false,
+                data: {"op":"input_nickname","nickname":val},
+                success: function(data){
+                    var ret = JSON.parse(data)['ret'];
+                    if(ret == "f"){
+                        alert("昵称已被取用");
+                        $("#nickname").attr('value', val);
+                    }
+                }
+            });
+        });
+
+
+        ///左边导航栏
+        $("#leftNav").affix({
+            offset: {
+                top: 125
+            }
+        });
+
+        //上传头像
+        $("#imgInput").change(function () {
+            //判断是否支持FileReader
+            var reader = null;
+            if(window.FileReader) {
+                reader = new FileReader();
+                if(reader == null)
+                    alert("FileReader is null");
+            } else {
+                alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！");
+            }
+            //获取文件
+            var imgfile = this.files[0];
+
+            //读取完成
+            reader.onload = function(e) {
+                //显示图片
+                $("#imgPreview").attr("src", e.target.result);
+                //document.getElementById("imgPreview").src = e.target.result;
+            };
+            reader.readAsDataURL(imgfile);
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        //////
+        $("#inputSearch").hide();
+        $("#myCarousel").carousel({
+            interval: 2000
+        });
+
+        ////搜索输入框样式
+        $(".glyphicon-search").click(function(event){
+            if ($("#inputSearch").is(':visible')){
+                alert("yyy");
+            }
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+            $("#inputSearch").show(200);
+        });
+        $("#inputSearch").click(function(event){
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+        });
+        document.onclick = function(){
+            $("#inputSearch").hide(200);
+        };
+
+        ////下拉菜单动画样式
+        $(".glyphicon-bell").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".img-circle").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".dropdown").mouseleave(function () {
+            $(this).children(".dropdown-menu").slideUp(200);
+        });
+
+        ////imgCard img
+
+    });
+</script>
+
+{% include 'foot.html' %}
+
+{% endblock %}

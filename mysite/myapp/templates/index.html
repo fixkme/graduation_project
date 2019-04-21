@@ -3,7 +3,7 @@
 {% block title %}欢迎光临首页{% endblock %}
 
 {% block content %}
-{% load static %}
+{% load staticfiles %}
 <style type="text/css">
     /*-----------------------------------navbar------------------------------------ */
     a:hover{
@@ -189,10 +189,30 @@
     .ower-right > .glyphicon-thumbs-up{
         font-size: 120%;
     }
+    /*-----------------------------------热门图片------------------------------------ */
+    #hot {
+        background-color: #AA0000;
+        width: 100%;
+        text-align: center;
+    }
+    #tags{
+        margin-top: 10px;
+        width: 90%;
+        display: inline-block;
+        background-color: #ce8483;
+    }
+    #tags>a{
+        padding: 4px 8px 4px 8px;
+        border-radius: 20px;
+        border:1px #cccccc solid;
+        background-color: #dddddd;
+        cursor: pointer;
+        color: #5e5e5e;
+    }
+    #tags a:hover{ color: #000000  }
 
-    /*-------------------------------*/
 </style>
-<div style="background-color: #f4f6f9">
+<div style="background-color: #f4f6f9; text-align: center">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -212,9 +232,8 @@
                             <div class="input-group">
                                 <p id="inputSearch">
                                     <select class="form-control">
-                                        <option value="volvo">volvo</option>
-                                        <option value="saab">saab</option>
-                                        <option value="opel">opel</option>
+                                        <option value="volvo">作品</option>
+                                        <option value="saab">用户</option>
                                     </select>
                                     <input type="text" class="form-control" placeholder="Search">
                                 </p>
@@ -222,33 +241,32 @@
                             </div>
                         </form>
                     </li>
-                    {% if 1 %}
+                    {% if request.session.logined %}
                     <li class="dropdown">
                         <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-bell"></span>
                         </p>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><span><a href="#">jmeter</a><span>5</span></span></li>
-                            <li><a href="#">EJB</a></li>
-                            <li><a href="#">Jasper</a></li>
-                            <li><a href="#">dhdhh</a></li>
+                            <li><a href="#">点赞</a></li>
+                            <li><a href="#">评论</a></li>
+                            <li><a href="#">新粉丝</a></li>
+                            <li><a href="#">收藏</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
-                            <img class="img-circle" src="{% static '/img/default_profile.jpg' %}">
+                            <img id="im" class="img-circle" src="{{ request.COOKIES.user_portrait }}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li><a href="{% url 'user' %}">个人中心</a></li>
-                            <li><a href="#">设置</a></li>
-                            <li><a href="#">消息</a></li>
-                            <li><a href="#">退出登录</a></li>
+                            <li><a href="{% url 'setting' %}">设置</a></li>
+                            <li><a href="{% url 'logout' %}">退出登录</a></li>
                         </ul>
                     </li>
                     <li><a href="#" style="margin-right: 25px">发布</a></li>
                     {% else %}
-                    <li><a id="login" href="#">登录</a></li>
-                    <li><a id="register" href="#">注册</a></li>
+                    <li><a id="login" href="{% url 'login' %}">登录</a></li>
+                    <li><a id="register" href="{% url 'register' %}">注册</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -482,8 +500,15 @@
             </div>
         </div>
     </div>
-    <div>
-
+    <div style="text-align: center;">
+        <h2>热门图片</h2>
+    </div>
+    <div id="hot">
+        <div id="tags">
+            <a href="">风景</a>
+            <a href="">春季</a>
+            <a href=""> 二次元</a>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -509,7 +534,7 @@
         //////////
         $("#inputSearch").hide();
         $("#myCarousel").carousel({
-            interval: 2000
+            interval: 3000
         });
 
         ////搜索输入框样式
