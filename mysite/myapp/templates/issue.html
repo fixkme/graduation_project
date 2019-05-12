@@ -1,0 +1,580 @@
+{% extends 'base.html' %}
+
+{% block title %}发布动态{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<style type="text/css">
+    /*-----------------------------------top  navbar------------------------------------ */
+    a:hover{
+        text-decoration: none;
+    }
+    #logo{
+        margin-left: 30px;
+        height: 90%;
+        width: 70%;
+    }
+    #topNav{
+        background-color: rgba(255, 255, 255, 1);
+        border: none;
+        margin: 0;
+    }
+    #topNav .navbar-nav > li > a:link{
+        font-size: 120%;
+        color: #000000;
+    }
+    #topNav .navbar-nav > li > a:visited{
+        color: #000000;
+    }
+    #topNav .navbar-nav > li > a:hover {
+        color: #46d233;
+    }
+    #inputSearch>input, #inputSearch>select{
+        border: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: none;
+        border-radius: 0;
+        color: #000000;
+    }
+    #inputSearch select{
+        cursor: pointer;
+    }
+    #inputSearch select>option{
+        color: #919191;
+        background-color: #ffffff;
+    }
+    #topNav .glyphicon-search{
+        font-size: 150%;
+        color: #000000;
+        cursor:pointer;
+        padding: 7px 0px 7px 5px;
+    }
+
+    #topNav .glyphicon-bell{
+        font-size: 150%;
+        color: #000000;
+        cursor:pointer;
+        margin-left: 15px;
+    }
+
+    #topNav .img-circle{
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    #topNav .dropdown-menu {
+        min-width:100px;
+    }
+    #topNav .dropdown-menu li a:hover{
+        background-color: inherit;
+        color: #46d233;
+    }
+    #topNav .navbar-nav li{
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+    #register{
+        background-color: #46d233;
+        color: #000000;
+        margin: 9px 15px 0 0;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+    /*------------------------------------------------*/
+    html, body{
+        margin:0;
+        padding:0;
+        width: 100%;
+        height: 100%;
+    }
+    #topNav{
+        border-bottom: solid 1px #e2e2e2;
+        height: 9%;
+        border-radius: 0;
+    }
+    #content{
+        width: 100%;
+        height: 91%;
+        position:fixed;
+    }
+    /*-----------------------------------upload  left------------------------------------ */
+    #upload{
+        background-color: #f4f6f9;
+        float: left;
+        height: 100%;
+        width: 75%;
+        overflow-y: scroll;
+
+    }
+    #add-img{
+        float: left;
+        margin: 30px 0 50px 30px;
+        width: 210px;
+        height: 210px;
+        text-align: center;
+        color: #46d233;
+        border: 3px dashed #46d233;
+    }
+    #add-img .glyphicon-plus{
+        margin: 30px 0 30px 0;
+        font-size: 300%;
+    }
+    .img-card{
+        float: left;
+        display: inline-block;
+        margin: 30px 0 0 30px;
+        width: 210px;
+        height: 210px;
+        background-position: center center;
+        background-size: cover;
+        cursor: move;
+    }
+    .img-card>img{
+        position: absolute;
+    }
+    #add-img{
+        position: relative;
+    }
+    #imgs_input{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0.5;
+        z-index: 2;cursor: pointer;
+    }
+    .img-card:hover{
+        box-shadow:0 0 10px 1px rgba(0, 0, 0, 0.51);
+    }
+    .img-card:hover > .cover-del{
+        visibility: visible;
+        background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.5));
+    }
+    .cover-del{
+        width: 100%;
+        margin-top: 170px;
+        text-align: center;
+        background-color: #bbbc8e;
+        visibility: hidden;
+        cursor: pointer;
+        color: white;
+        padding: 10px 0 10px 0;
+    }
+    .cover-del>span:first-child{
+        margin-right: 20px;
+    }
+    .cover-del>span:last-child{
+        margin-left: 20px;
+    }
+    /******************************* edit right************************************/
+    #edit{
+        width: 25%;
+        height: 100%;
+        border-left: solid 1px #e2e2e2;
+        background-color: white;
+        float: right;
+    }
+    #describe{
+        height: 78%;
+        overflow-y: scroll;
+    }
+    #describe .form-group{
+        margin-right: 5% ;
+        margin-left: 5%;
+    }
+    #describe label>span{
+        color: red;
+        font-size: 120%;
+    }
+    #describe .tag{
+        background-color: #f0f1f2;
+        border-radius: 15px;
+        display: inline-block;
+        padding: 4px 12px 4px 12px;
+        margin: 10px 10px 0 0;
+    }
+    #describe .tag>.glyphicon-remove{
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    #affirm{
+        height: 22%;
+        width: 100%;
+        border-top: solid 1px #e2e2e2;
+        background-color: #FFFFFF;
+        text-align: center;
+    }
+    #affirm button{
+        width: 80%;
+        margin-top: 40px;
+    }
+    #edit button{
+        background-color: #46d233;
+        border-color: #46d233;
+    }
+    #edit button:hover{
+        background-color: #43b130;
+        border-color: #43b130;
+    }
+
+</style>
+
+<nav id="topNav" class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img id="logo" src="{% static '/img/icon1.png' %}">
+            </a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a class="nav-elem" href="{% url 'index' %}">首页</a></li>
+                <li><a class="nav-elem" href="#">动态</a></li>
+                <li><a class="nav-elem" href="#">APP</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form" role="search" >
+                        <div class="input-group">
+                            <p id="inputSearch">
+                                <select class="form-control">
+                                    <option value="volvo">作品</option>
+                                    <option value="saab">用户</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="Search">
+                            </p>
+                            <span class="glyphicon glyphicon-search input-group-btn"></span>
+                        </div>
+                    </form>
+                </li>
+                {% if request.session.logined %}
+                <li class="dropdown">
+                    <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-bell"></span>
+                    </p>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="#">点赞<span class="badge">5</span></a></li>
+                        <li><a href="#">评论</a></li>
+                        <li><a href="#">新粉丝</a></li>
+                        <li><a href="#">收藏</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
+                        <img id="figure" class="img-circle" src="{{ request.session.user_figure }}">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="{% url 'user' %}">个人中心</a></li>
+                        <li><a href="{% url 'setting' %}">设置</a></li>
+                        <li><a href="{% url 'logout' %}">退出登录</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" style="margin-right: 25px">发布</a></li>
+                {% else %}
+                <li><a id="login" href="">登录</a></li>
+                <li><a id="register" href="">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<form id="content" role="form" action="" method="post" enctype="multipart/form-data">
+    <div id="upload">
+        <!--
+        <div class="img-card">
+            <img src="{% static '/img/cover-image-label.png' %}">
+            <div class="cover-del">
+                <span>设为封面</span>
+                <span> | </span>
+                <span>删除图片</span>
+            </div>
+        </div>
+        -->
+        <label for="imgs_input" id="add-img">
+            <input type="file" name="imgs_input" id="imgs_input" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple"/>
+            <div>
+                <span class="glyphicon glyphicon-plus"></span>
+            </div>
+            <p>添加图片</p>
+            <p>格式：jpg/png/gif</p>
+        </label>
+    </div>
+    <div id="edit">
+        {% csrf_token %}
+        <div id="describe">
+            <div class="form-group">
+                <label for="title">标题<span>*</span></label>
+                <input type="text" class="form-control" id="title" name="title" required="required">
+            </div>
+            <div class="form-group">
+                <label for="category">作品分类<span>*</span></label>
+                <select id="category" name="category" class="form-control">
+                    <option value="0">生活</option>
+                    <option value="1">人像</option>
+                    <option value="2">插画</option>
+                    <option value="3">二次元</option>
+                    <option value="4">设计</option>
+                    <option value="5">美食</option>
+                    <option value="6">纪实</option>
+                    <option value="7">风景</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="note">描述</label>
+                <textarea class="form-control" id="note" name="note" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tag">标签</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="tag" name="tag">
+                    <div class="input-group-btn">
+                        <button type="button" id="add-tag-btn" class="btn btn-primary">添加</button>
+                    </div>
+                </div>
+                <!--
+                <div class="tag">
+                    <span>风景</span><span class="glyphicon glyphicon-remove"></span>
+                </div>
+                -->
+            </div>
+        </div>
+        <div id="affirm">
+            <button type="button" class="btn btn-primary">发布作品</button>
+            <p>已添加 <span id="count">0</span> / 40</p>
+        </div>
+    </div>
+</form>
+
+<script>
+    function getFileURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) {//basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) {//mozilla(firefox)兼容火狐
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {//webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $(document).ready(function() {
+
+        var imgArr = [];//new Array();
+        var cover_label = -1;
+        //上传图片
+        $("#imgs_input").change(function () {
+            var count = $("#count").text().trim();
+            count = new Number(count);
+            var imgfiles = this.files;
+            var n = imgfiles.length;
+            for (var i=0; i<n; i++){
+                imgArr.push(imgfiles[i]); //将图片放入数组中
+                var imgUrl = getFileURL(imgfiles[i]);//调用函数调取图片地址
+
+                //显示图片
+                    var $newElem = $("<div class='img-card'></div>");
+                    $newElem.css('background-image',"url("+ imgUrl +")");
+                    var $newChild = $("<div class='cover-del'></div>");
+                    var $setcover = $("<span>设为封面</span>");
+                    var $del = $("<span>删除图片</span>");
+
+                    $newChild.append($setcover);
+                    $newChild.append($("<span> | </span>"));
+                    $newChild.append($del);
+                    $newElem.append($newChild);
+                    $newElem.attr("index", (i+count).toString());
+                    $("#add-img").before($newElem);
+
+                    //设为封面事件
+                    $setcover.on('click', function () {
+                        var $old = $("#upload>div>img")[0];
+                        var $p = $(this).parent().parent();
+                        $p.prepend($old);
+                        cover_label = new Number($p.attr('index'));
+                        //alert(cover_label);
+                    });
+                    //删除事件
+                    $del.on('click', function () {
+                        var index = new Number($(this).parent().parent().attr('index'));
+                        //alert(index);
+                        $(this).parent().parent().remove();
+                        var count = $("#count").text().trim();
+                        count = new Number(count);
+                        count -= 1;
+                        $("#count").text(count.toString());
+                        //删除对应file
+                        imgArr.splice(index,1);
+                        //重新设置index
+                        var imgcards = $(".img-card");
+                        for (var j=0; j < imgcards.length; j++){
+                            imgcards[j].setAttribute('index', j.toString());
+                        }
+                        //如果删除的是封面，则设置第一张为封面
+                        if (index.toString() == cover_label.toString()){
+                            $("#upload>div:first").prepend("<img src=\"/static/img/cover-image-label.png\">");
+                            cover_label = 0;
+                            if (count <= 0)  cover_label = -1;
+                        }
+                    });
+            }
+            count += n;
+            $("#count").text(count.toString());
+            //默认第一张为相册封面
+            if (cover_label == -1){
+                $("#upload>div:first").prepend("<img src=\"/static/img/cover-image-label.png\">");
+                cover_label = 0;
+            }
+        });
+
+        //提交数据
+        $("#affirm>button").click(function () {
+            if (imgArr.length <= 0){
+                alert("请添加图片");
+                return false;
+            }
+            if ($("#title").val() == "" || $("#title").val() == null){
+                alert("请添加标题");
+                return false;
+            }
+            var formData = new FormData();
+            formData.append("csrfmiddlewaretoken", $('[name="csrfmiddlewaretoken"]').val());
+            //图片
+            for (var i=0; i<imgArr.length; i++){
+                formData.append("album_imgs", imgArr[i]);
+            }
+            //其他数据
+            formData.append("album_name", $("#title").val().toString().trim());
+            formData.append("album_category", $("#category").val());
+            formData.append("album_note", $("#note").val());
+            formData.append("album_cover", cover_label.toString());
+            var tags = $(".tag");
+            //alert(tags[0].firstChild.innerHTML);
+            for(var j = 0;j<tags.length;j++) {
+                formData.append("album_tags", tags[j].firstChild.innerHTML);
+            }
+            $.ajax({url : "/issue/", type : 'POST', dataType: 'json',
+                data : formData,
+                crossDomain: true,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success : function(response) {
+                    var json = JSON.parse(response);
+                    alert(json["ret"]);
+                }
+                //error : function(response) {alert(response);}
+            });
+        });
+
+        //删除图片
+        $(".cover-del>span:last").click(function () {
+            $(this).parent().parent().remove();
+            var count = $("#count").text().trim();
+            count = new Number(count);
+            count -= 1;
+            $("#count").text(count.toString());
+        });
+
+        //添加标签
+        $("#add-tag-btn").click(function () {
+            var input_tag = $("#tag").val().trim();
+            if (input_tag == "" || input_tag == null){
+                //alert("xxx");
+                return false;
+            }
+            //检查是否重复
+            var tags = $(".tag");
+            //alert(tags.length);
+            for(var i=0;i<tags.length;i++){
+                //alert(tags[i].children[0].innerText);
+                if(tags[i].children[0].innerText == input_tag){
+                    alert("该标签已存在");
+                    $("#tag").val("");
+                    return false;
+                }
+            }
+            //添加
+            $("[for='tag']").parent().append("<div class='tag'><span></span><span class='glyphicon glyphicon-remove'></span></div>");
+            $(".tag:last>span:first").text(input_tag);
+            $(".tag:last>span:last").click(function () {
+                $(this).parent().hide(500, function () {
+                    $(this).remove();
+                });
+            });
+            $("#tag").val("");
+        });
+
+        //删除标签
+        $(".glyphicon-remove").click(function () {
+            $(this).parent().hide(500, function () {
+                $(this).remove();
+            });
+        });
+
+        window.onbeforeunload = function(event) {
+            if (imgArr.length > 0){
+                var r=confirm("系统可能不会保存您所做的更改!");
+                if (r==true)
+                    window.close();
+                else
+                    return false;
+            }
+        };
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        //////
+        $("#inputSearch").hide();
+        $("#myCarousel").carousel({
+            interval: 2000
+        });
+
+        ////搜索输入框样式
+        $(".glyphicon-search").click(function(event){
+            if ($("#inputSearch").is(':visible')){
+                alert("yyy");
+            }
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+            $("#inputSearch").show(200);
+        });
+        $("#inputSearch").click(function(event){
+            var e=window.event || event;
+            if(e.stopPropagation){
+                e.stopPropagation();
+            }else{
+                e.cancelBubble = true;
+            }
+        });
+        document.onclick = function(){
+            $("#inputSearch").hide(200);
+        };
+
+        ////下拉菜单动画样式
+        $(".glyphicon-bell").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".img-circle").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".dropdown").mouseleave(function () {
+            $(this).children(".dropdown-menu").slideUp(200);
+        });
+
+    });
+</script>
+
+{% endblock %}

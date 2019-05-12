@@ -176,6 +176,10 @@
         margin-left: 10px;
         color: #FFFFFF;
     }
+    .ower-left img{
+        width: 32px;
+        height: 32px;
+    }
     a.ower-left:link, a.ower-left:visited, a.ower-left:hover{
         color: #FFFFFF;
     }
@@ -255,7 +259,7 @@
                     </li>
                     <li class="dropdown">
                         <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
-                            <img id="im" class="img-circle" src="{{ request.COOKIES.user_portrait }}">
+                            <img id="im" class="img-circle" src="{{ request.session.user_figure }}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li><a href="{% url 'user' %}">个人中心</a></li>
@@ -307,7 +311,7 @@
         <div class="imgRow">
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/5.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -325,7 +329,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/6.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -340,7 +344,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/7.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -355,7 +359,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/1.jpg' %}" alt="img" >
+                    <img src="{% static '/img/8.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -372,7 +376,7 @@
         <div class="imgRow">
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/9.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -390,7 +394,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/10.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -405,7 +409,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/11.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -420,7 +424,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/1.jpg' %}" alt="img" >
+                    <img src="{% static '/img/12.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -437,7 +441,7 @@
         <div class="imgRow">
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/13.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -455,7 +459,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/14.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -470,7 +474,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/4.jpg' %}" alt="img" >
+                    <img src="{% static '/img/15.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -485,7 +489,7 @@
             </div>
             <div class="imgCard">
                 <a href="#" class="aa">
-                    <img src="{% static '/img/1.jpg' %}" alt="img" >
+                    <img src="{% static '/img/16.jpg' %}" alt="img" >
                 </a>
                 <div class="ower">
                     <a class="ower-left" href="#">
@@ -500,6 +504,7 @@
             </div>
         </div>
     </div>
+    <!--
     <div style="text-align: center;">
         <h2>热门图片</h2>
     </div>
@@ -510,6 +515,7 @@
             <a href=""> 二次元</a>
         </div>
     </div>
+    -->
 </div>
 <script type="text/javascript">
     $(document).ready(function(){

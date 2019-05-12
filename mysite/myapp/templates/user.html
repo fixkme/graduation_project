@@ -49,7 +49,7 @@
         font-size: 150%;
         color: #000000;
         cursor:pointer;
-        padding: 7px 0px 7px 5px;
+        padding: 7px 0 7px 5px;
     }
 
     #topNav .glyphicon-bell{
@@ -137,11 +137,15 @@
     /*-----------------------------------catalog------------------------------------ */
     #catalog{
         width: 100%;
-        text-align: center;
     }
     #myTab{
-        display: inline-block;
+        width: 100%;
         text-align: center;
+        border-bottom: solid 1px #e2e2e2;
+    }
+    #myTab li{
+        float: none;
+        display: inline-block;
     }
     .nav-pills>li>a{
         color: black;
@@ -162,45 +166,112 @@
     #tabContent{
         width: 100%;
         background-color: #f4f6f9;
-        margin: 0;
-
+        margin-top: 0;
     }
     /*-----------------------------------相册------------------------------------ */
     #album{
+        border: solid 1px #e2131a;
+        margin: 0 5% 0 5%;
+    }
+    #album>div{
+        width: 100%;
+        padding-left: 20px;
+    }
+    .album-card{
+        float: none;
+        display: inline-block;
+        margin: 30px 20px 0 0 ;
+        background-color: white;
+    }
+    .album-cover{
+        display: inline-block;
+        width: 274px;
+        height: 274px;
+        background-position: center center;
+        background-size: cover;
+        cursor: pointer;
+        /*background-image: url("{% static '/img/3.jpg' %}");*/
+    }
+    .album-info{
+        width: 274px;
+        height: 90px;
+        color: #999;
+    }
+    .album-info>div{
+        margin-top: 10px;
+        margin-left: 2px;
+    }
+    .album-info>div:last-child>div{
+        margin-right: 20px;
+        display: inline;
+    }
+    .album-info>div:last-child>div:last-child{
+        float: right;
+    }
+    .album-info .glyphicon-thumbs-up{
+        cursor: pointer;
+    }
+    .album-name{
+        color: black;
+        font-size: 120%;
+        font-weight: 600;
+    }
+    .album-num{
+        width: 50px;
+        color: #FFFFFF;
+        transform:translate(210px,235px);
+        background-color: rgba(30, 30, 30, 0.5);
+        padding: 4px 4px 4px 4px;
+    }
+    .album-create-time{
+        margin-right: 2px;
+        float: right;
+    }
+    .album-tags{
 
+    }
+    .album-tags>span{
+        background-color: #f0f1f2;
+        border-radius: 15px;
+        padding: 4px 12px 4px 12px;
+        margin: 0 2px 0 0;
+        font-size: 80%;
     }
     /*-----------------------------------收藏------------------------------------ */
     #collect{
-
+        margin: 0 5% 0 5%;
+        background-color: #FFFFFF;
     }
     /*-----------------------------------资料信息------------------------------------ */
-    #userinfo{
-        display: inline-block;
-        width: 90%;
+    #user-info{
+        width: 100%;
+    }
+    #user-info>div{
         background-color: #FFFFFF;
         text-align: left;
-        margin-bottom: 20px;
+        margin: 0 5% 0 5%;
     }
-    #userinfo table{
+    #user-info table{
         margin-left: 80px;
     }
-    #userinfo tr{
+    #user-info tr{
         height: 80px;
     }
-    #userinfo th{
+    #user-info th{
         font-size: 110%;
         width: 10em;
     }
-    #userinfo td{
+    #user-info td{
         width: 400px;
     }
-    #userinfo>a{
+    #user-info>a{
         position: absolute;
         text-decoration: none;
         color: #46d233;
         font-size: 120%;
         transform: translate(1000px, -380px);
     }
+
 </style>
 
 <div>
@@ -246,7 +317,7 @@
                     </li>
                     <li class="dropdown">
                         <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
-                            <img class="img-circle" src="{{ user_portrait }}">
+                            <img id="figure" class="img-circle" src="{{ user_figure }}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li><a href="{% url 'user' %}">个人中心</a></li>
@@ -269,11 +340,13 @@
             <img id="im" src="{{ user_cover }}" alt="img" >
         </a>
         <div id="profile">
-            <a><img src="{{ user_portrait }}" class="img-circle"></a>
+            <a><img src="{{ user_figure }}" class="img-circle"></a>
             <span>
                 <div>
                     <span>{{ user_nickname }}</span>
+                    {% if user_nickname != request.session.user_nickname %}
                     <a> + 关注</a>
+                    {% endif %}
                 </div>
                 <div>
                     <span>关注123</span>
@@ -285,48 +358,131 @@
         </div>
         <div id="share"></div>
     </div>
+
     <div id="catalog">
         <ul id="myTab" class="nav nav-pills">
             <li class="active"><a href="#album" data-toggle="tab">相册</a></li>
             <li><a href="#collect" data-toggle="tab">收藏</a></li>
-            <li><a href="#userinfo" data-toggle="tab">资料</a></li>
+            <li><a href="#user-info" data-toggle="tab">资料</a></li>
         </ul>
         <div id="tabContent" class="tab-content">
-            <br>
             <div class="tab-pane fade in active" id="album">
-                <p>相册。。</p>
+                <div>
+                    {% for album in album_list %}
+                    <div class="album-card">
+                        <a href="#" class="album-cover" style="background-image: url('{{ album.album_cover }}');">
+                            <div class="album-num"><span>{{ album.photo_num }}</span> <span class="glyphicon glyphicon-book"></span></div>
+                        </a>
+                        <div class="album-info">
+                            <div>
+                                <span class="album-name">{{ album.album_name }}</span>
+                                <span class="album-create-time">{{ album.album_create_time }}</span>
+                            </div>
+                            <div class="album-tags">
+                                {% for tag in album.album_tags %}
+                                    <span>{{tag}}</span>
+                                    {% empty %}
+                                    <br>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <div><span class="glyphicon glyphicon-eye-open"></span> <span>{{album.album_view_num}}</span></div>
+                                <div><span class="glyphicon glyphicon-comment"></span> <span>{{album.album_comment_num}}</span></div>
+                                <div><span class="glyphicon glyphicon-thumbs-up"></span> <span>{{album.album_favour_num}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!--
+                    <div class="album-card">
+                        <div class="album-cover">
+                            <div class="album-num"><span>12</span> <span class="glyphicon glyphicon-book"></span></div>
+                        </div>
+                        <div class="album-info">
+                            <div>
+                                <span class="album-name">花好月圆</span>
+                                <span class="album-create-time">2018-3-10</span>
+                            </div>
+                            <div class="album-tags">
+                                <span>风景</span>
+                                <span>风景</span>
+                                <span>嘤嘤嘤</span>
+                                <span>风景</span>
+                            </div>
+                            <div>
+                                <div><span class="glyphicon glyphicon-eye-open"></span><span>123</span></div>
+                                <div><span class="glyphicon glyphicon-comment"></span><span>12</span></div>
+                                <div><span class="glyphicon glyphicon-thumbs-up"></span><span>127</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </div>
             </div>
             <div class="tab-pane fade" id="collect">
-                <p>收藏。。</p>
+                <div style="height: 50px">收藏。。</div>
             </div>
-            <div class="tab-pane fade" id="userinfo">
-                <table border="0">
+            <div class="tab-pane fade" id="user-info">
+                <br>
+                <div>
+                    <table border="0">
                     <tr>
                         <th>ID</th>
-                        <td>36334895</td>
+                        <td>{{user_id}}}</td>
                     </tr>
                     <tr>
                         <th>昵称</th>
-                        <td>月雪纷飞</td>
+                        <td>{{user_nickname}}</td>
                     </tr>
                     <tr>
                         <th>性别</th>
-                        <td>保密</td>
+                        <td>{{user_gender}}</td>
                     </tr>
                     <tr>
                         <th>手机号</th>
-                        <td>18866664444</td>
+                        <td>{{user_phone}}</td>
                     </tr>
                     <tr>
                         <th>个人签名</th>
-                        <td>哈哈哈哈哈</td>
+                        <td>{{user_signature}}</td>
                     </tr>
                 </table>
-                <a href="">编辑个人资料 <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+                <a href="{% url 'setting' %}">编辑个人资料 <span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
+            <br>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+
+        //页面加载完毕后加载数据
+        var tds = $("#user-info td");
+        $.ajax({ url: "user/",  type:'GET',async:false,
+            data: {"op":"load_user_data"},
+            success: function(response_data){
+                    var user_data = JSON.parse(response_data);
+                    tds[0].innerText = user_data['user_id'];
+                    tds[1].innerText = user_data['user_nickname'];
+                    tds[3].innerText = user_data['user_phone'];
+                    tds[4].innerText = user_data['user_signature'];
+                    var gender = user_data['user_gender'];
+                    if (gender == 0)
+                        tds[2].innerText = "保密";
+                    else if (gender == 1)
+                        tds[2].innerText = "男";
+                    else
+                        tds[2].innerText = "女";
+
+
+            }
+        });
+
+        //
+    });
+
+</script>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -378,8 +534,7 @@
 
     });
 </script>
-
 {% include 'foot.html' %}
-
 {% endblock %}
+
 

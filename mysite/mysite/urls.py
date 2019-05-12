@@ -18,6 +18,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path, re_path
 from myapp import views
+from . import settings
+from django.views.static import serve
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -27,4 +29,10 @@ urlpatterns = [
     url(r'^logout', views.logout, name="logout"),
     url(r'^user/', views.user, name='user'),
     url(r'^setting/', views.setting, name='setting'),
-]
+    url(r'^alter_user_data/', views.alter_user_data, name='alter_user_data'),
+    url(r'^alter_pwd/', views.alter_pwd, name='alter_pwd'),
+    url(r'^issue/', views.issue, name='issue'),
+
+    url(r'^media/(?P<path>.*)', serve, {"document_root":settings.MEDIA_ROOT}),
+    #url(r'^media/user_figures/(?P<path>.*)', serve, {'document_root':settings.MEDIA_ROOT+'/user_figures'}),
+] #+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
