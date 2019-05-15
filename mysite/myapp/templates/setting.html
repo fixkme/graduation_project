@@ -345,7 +345,7 @@
             //等待ajax执行完
             if(ret == "f"){
                 alert("昵称已被取用");
-                $("#nickname").attr('value', val);
+                $("#nickname").val(val);
                 return false;
             }else if(ret == 't'){
                 $("#section-1-form").submit();
@@ -362,7 +362,7 @@
                     var ret = JSON.parse(data)['ret'];
                     if(ret == "f"){
                         alert("昵称已被取用");
-                        $("#nickname").attr('value', val);
+                        $("#nickname").val(val);
                     }
                 }
             });

@@ -144,7 +144,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        opacity: 0.5;
+        opacity: 0.0;
         z-index: 2;cursor: pointer;
     }
     .img-card:hover{
@@ -274,7 +274,7 @@
                         <li><a href="{% url 'logout' %}">退出登录</a></li>
                     </ul>
                 </li>
-                <li><a href="#" style="margin-right: 25px">发布</a></li>
+                <li><a href="{% url 'issue' %}" style="margin-right: 25px">发布</a></li>
                 {% else %}
                 <li><a id="login" href="">登录</a></li>
                 <li><a id="register" href="">注册</a></li>

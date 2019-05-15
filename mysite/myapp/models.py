@@ -35,7 +35,7 @@ class User(models.Model):
     signature = models.CharField(max_length=50, null=True, default="这个人很懒，什么都没写...") #个人签名
     cover = models.CharField(max_length=50, null=True, default="/static/img/3.jpg") #个人主页封面路径
     #portrait = models.CharField(max_length=50, null=True, default="/static/img/default_profile.jpg")  # 头像路径
-    figure = models.ImageField(upload_to='user_figures', null=True, default="/user_figures/default_profile.jpg")
+    figure = models.ImageField(upload_to='user_figures', null=True, default="/default_profile.jpg")
 
 class Album(models.Model):
     name = models.CharField(max_length=16)

@@ -1,51 +1,40 @@
 <!DOCTYPE html>
- <html>
-    <head>
-        <meta charset="utf-8">
-        <title>标题</title>
-        <link href="./css/index.css" rel="stylesheet"/>
-        <script type="text/javascript" src="./js/jquery.js"></script>
-        <script type="text/javascript" src="./js/uploadImg.js"></script>
-    </head>
-    <body>
-      <div id="container">
-        <a href="javascript:void(0)" class="file">选择文件
-           <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
-           <input type="hidden" value=""/>
-         </a>
-      </div>
-      <div id="container2">
-        <a href="javascript:void(0)" class="file">选择文件
-           <input type='file' multiple accept = 'image/gif,image/jpeg,image/jpg,image/png' />
-           <input type="hidden" />
-         </a>
-      </div>
-      <script type="text/javascript">
-        var data = [
-          {
-            "url": 'https://img.alicdn.com/tfs/TB11nHZXWagSKJjy0FgXXcRqFXa-218-46.png'
-          },
-          {
-            "url": 'https://img.alicdn.com/simba/img/TB1WT41SVXXXXaSXpXXSutbFXXX.jpg'
-          }
-        ];
-        var params = {
-          container: '#container',
-          url: '',
-          dragDrop: false,
-          data: data,
-          onDragLeave: function(target) {
-            console.log(111)
-          }
-        };
-        var uploadImg1 = new UploadImg(params);
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>Bootstrap 实例 - 缩略图</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-        // 多个情况下
-        var params2 = {
-          container: '#container2',
-          url: ''
-        };
-        var uploadImg2 = new UploadImg(params2);
-      </script>
-    </body>
+<div class="row">
+    <div class="col-sm-6 col-md-3">
+        <a href="#">
+            <img src="./img3.jpg" class="img-responsive" width="304" height="236"
+                 alt="通用的占位符缩略图">
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="https://www.runoob.com/wp-content/uploads/2014/06/kittens.jpg"
+                 alt="通用的占位符缩略图">
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="https://www.runoob.com/wp-content/uploads/2014/06/kittens.jpg"
+                 alt="通用的占位符缩略图">
+        </a>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <a href="#" class="thumbnail">
+            <img src="https://www.runoob.com/wp-content/uploads/2014/06/kittens.jpg"
+                 alt="通用的占位符缩略图">
+        </a>
+    </div>
+</div>
+
+</body>
 </html>

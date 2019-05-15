@@ -325,7 +325,7 @@
                             <li><a href="{% url 'logout' %}">退出登录</a></li>
                         </ul>
                     </li>
-                    <li><a href="#" style="margin-right: 25px">发布</a></li>
+                    <li><a href="{% url 'issue' %}" style="margin-right: 25px">发布</a></li>
                     {% else %}
                     <li><a id="login" href="{% url 'login' %}">登录</a></li>
                     <li><a id="register" href="{% url 'register' %}">注册</a></li>
@@ -370,8 +370,8 @@
                 <div>
                     {% for album in album_list %}
                     <div class="album-card">
-                        <a href="#" class="album-cover" style="background-image: url('{{ album.album_cover }}');">
-                            <div class="album-num"><span>{{ album.photo_num }}</span> <span class="glyphicon glyphicon-book"></span></div>
+                        <a href="/view-album/{{album.album_id}}/" class="album-cover" style="background-image: url('{{ album.album_cover }}');">
+                            <div class="album-num"><span>{{ album.album_photo_num }}</span> <span class="glyphicon glyphicon-book"></span></div>
                         </a>
                         <div class="album-info">
                             <div>

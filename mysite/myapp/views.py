@@ -15,9 +15,13 @@ def index(request):
     response_data["user_id"] = request.COOKIES.get('user_id')
     response_data["user_portrait"] = request.COOKIES.get('user_portrait')
     '''
-    if request.method == "GET":
+    response_data = {}
+    user_id = request.session.get('user_id', None)
+    if request.method == "GET" and user_id:
         try:
-            pass
+            m_user = User.objects.get(pk=user_id)
+            response_data['user_figure'] = m_user.figure.url
+            return render(request, 'index.html', response_data)
         except Exception as err:
             print("index ------ ", err)
     return render(request, 'index.html')
@@ -59,24 +63,25 @@ def login(request):
         val = request.POST.get('user')
         try:
             if len(val) == 11 and val.isdigit():
-                user = User.objects.get(phone=val)
+                m_user = User.objects.get(phone=val)
             else:
-                user = User.objects.get(nickname=val)
+                m_user = User.objects.get(nickname=val)
             pwd = request.POST.get('pwd')
-            if user.pwd == pwd: #登录成功，记录user信息
+            if m_user.pwd == pwd: #登录成功，记录user信息
                 request.session['logined'] = 1
-                request.session['user_id'] = user.pk
-                request.session['user_nickname'] = user.nickname
-                request.session['user_figure'] = user.figure.url
-                request.session['user_signature'] = user.signature
-                request.session['user_cover'] = user.cover
+                request.session['user_id'] = m_user.pk
+                request.session['user_nickname'] = m_user.nickname
+                request.session['user_figure'] = m_user.figure.url
+                request.session['user_signature'] = m_user.signature
+                request.session['user_cover'] = m_user.cover
                 response = HttpResponseRedirect(reverse("index"))
                 #response.set_cookie("user_id", user.pk, max_age=86400) #一天期限
                 #response.set_cookie("user_figure", user.portrait, max_age=86400)  # 一天期限
                 return response
             else:
                 raise
-        except:
+        except Exception as err:
+            print("login ---- ", err)
             return render(request, 'login.html',
                          {'msg':'用户名或密码错误', 'username':val, 'pwd':pwd})
     return render(request, 'login.html')
@@ -123,9 +128,10 @@ def user(request):
             album_tags = models.AlbumTag.objects.filter(album=obj).values_list('name', flat=True)
             print("{0} --- {1}".format(obj.name, len(photo_objs)))
             #print("url --- ", album_cover_obj.data.url)
-            print("tags --- ", album_tags)
+            #print("tags --- ", type(album_tags), album_tags)
 
-            data['photo_num'] = len(photo_objs)
+            data['album_id'] = obj.pk
+            data['album_photo_num'] = len(photo_objs)
             data['album_cover'] = album_cover_obj.data.url
             data['album_create_time'] = str(obj.create_time.date())
             data['album_name'] = obj.name
@@ -164,50 +170,57 @@ def setting(request):
         if op == "load_user_data": #页面加载完获取个人资料
             try:
                 user_data = {}
-                user = User.objects.get(pk=user_id)
-                user_data['user_nickname'] = user.nickname
-                user_data['user_figure'] = user.figure.url  #'/media/user_figures/default_profile.jpg'
-                user_data['user_gender'] = user.gender
-                user_data['user_signature'] = user.signature
-                print(user_data['user_figure'])
+                m_user = User.objects.get(pk=user_id)
+                user_data['user_nickname'] = m_user.nickname
+                user_data['user_figure'] = m_user.figure.url
+                user_data['user_gender'] = m_user.gender
+                user_data['user_signature'] = m_user.signature
+                #print(user_data['user_figure'])
                 return HttpResponse(json.dumps(user_data))
             except Exception as err:
                 print('setting load_user_data ----- ', err)
         elif op == "verify_nickname": #验证输入的昵称是否唯一
-            ret = 't' #true
-            val = request.GET.get('nickname')
-            exist = User.objects.filter(nickname=val)
-            if exist:
-                ret = 'f' #false
-            return HttpResponse(json.dumps({'ret':ret}))
+            try:
+                ret = 't'  # true
+                val = request.GET.get('nickname')
+                exist = User.objects.get(nickname=val)
+                if exist.pk != user_id:
+                    ret = 'f'  # false
+                return HttpResponse(json.dumps({'ret': ret}))
+            except Exception as err:
+                print("verify_nickname ----- ", err)
         elif op == "verify_pwd": #验证输入的密码是否正确
-            ret = 't' #true
-            val = request.GET.get('old_pwd')
-            user = User.objects.get(pk=user_id)
-            if user.pwd != val:
-                ret = 'f' #false
-            return HttpResponse(json.dumps({'ret':ret}))
+            try:
+                ret = 't'  # true
+                val = request.GET.get('old_pwd')
+                m_user = User.objects.get(pk=user_id)
+                if m_user.pwd != val:
+                    ret = 'f'  # false
+                return HttpResponse(json.dumps({'ret': ret}))
+            except Exception as err:
+                print("verify_pwd --- ", err)
 
     return render(request, 'setting.html', respond_data)
 
 #处理提交的个人资料修改
 def alter_user_data(request):
     user_id = request.session.get('user_id', None)
-    user = User.objects.get(pk=user_id)
+
     if request.method == 'POST':
-        user.nickname = request.POST.get('nickname', user.nickname)
-        user.signature = request.POST.get('signature', user.signature)
-        user.gender = request.POST.get('gender', user.gender)
-        figure = request.FILES.get('imgInput', None)
-        if figure:
-            suffix = os.path.splitext(figure.name)[-1] #文件后缀
-            dire = os.path.dirname(figure.name)
-            file_name = os.path.join(dire, str(user_id) + suffix)
-            figure.name = file_name
-            user.figure = figure
         try:
-            user.save()
-            request.session['user_nickname'] = user.nickname
+            m_user = User.objects.get(pk=user_id)
+            m_user.nickname = request.POST.get('nickname', m_user.nickname)
+            m_user.signature = request.POST.get('signature', m_user.signature)
+            m_user.gender = request.POST.get('gender', m_user.gender)
+            figure = request.FILES.get('imgInput', None)
+            if figure:
+                suffix = os.path.splitext(figure.name)[-1] #文件后缀
+                dire = os.path.dirname(figure.name)
+                file_name = os.path.join(dire, str(user_id) + suffix)
+                figure.name = file_name
+                m_user.figure = figure
+                m_user.save()
+                request.session['user_nickname'] = m_user.nickname
         except Exception as err:
             print('alter_user_data ---- ', err)
     return HttpResponseRedirect(reverse('setting'))
@@ -234,14 +247,16 @@ def issue(request):
         reponse_data['ret'] = "上传成功"
         try:
             user_id = request.session.get('user_id')
-            m_user = User.objects.get(pk=user_id)
-            album_name = request.POST.get('album_name', None)
-            album_category = request.POST.get('album_category', None)
+            m_user = models.User.objects.get(pk=user_id)
+            album_name = request.POST.get('album_name', '')
+            album_category = request.POST.get('album_category', '')
             album_note = request.POST.get('album_note', "")
-            album_imgs = request.FILES.getlist('album_imgs', None)
-            album_tags = request.POST.getlist('album_tags', None)
+            album_imgs = request.FILES.getlist('album_imgs', [])
+            album_tags = request.POST.getlist('album_tags', [])
             album_cover = request.POST.get("album_cover", "0")
             print(len(album_imgs), len(album_tags))
+            if not album_imgs:
+                raise Exception("没有上传图片，album_imgs is null！")
             new_album = models.Album()
             new_album.name = album_name
             new_album.category = album_category
@@ -267,3 +282,46 @@ def issue(request):
         return render(request, 'issue.html')
         #return HttpResponse(json.dumps(reponse_data))
     return render(request, 'issue.html')
+
+def view_album(request, album_id):
+    print('view_album', album_id)
+    response_data = dict()
+    user_data = dict()
+    album_data = dict()
+    user_id = request.session.get('user_id')
+    try:
+        m_user = models.User.objects.get(pk=user_id)
+        album = models.Album.objects.get(pk=album_id)
+        photos = models.Photo.objects.filter(album=album)#.values_list('data', flat=True)
+        tags = models.AlbumTag.objects.filter(album=album).values_list('name', flat=True)
+
+        album_photos_list = []
+        for photo in photos:
+            album_photos_list.append(photo.data.url)
+        album_tags_list = []
+        for tag in tags:
+            album_tags_list.append(tag)
+
+        user_data['user_nickname'] = m_user.nickname
+        user_data['user_figure'] = m_user.figure.url
+        user_data['user_signature'] = m_user.signature
+
+        album_data['album_name'] = album.name
+        album_data['album_create_time'] = str(album.create_time.date())
+        album_data['album_category'] = album.get_category_display()
+        album_data['album_note'] = album.note
+        album_data['album_photo_num'] = len(photos)
+        album_data['album_view_num'] = 0
+        album_data['album_comment_num'] = 0
+        album_data['album_favour_num'] = 0
+
+        album_data['album_photos_list'] = album_photos_list
+        album_data['album_tags_list'] = album_tags_list
+
+        response_data['user_data'] = user_data
+        response_data['album_data'] = album_data
+
+        return render(request, 'view_album.html', response_data)
+    except Exception as err:
+        print("view_album " + str(album_id), err)
+        return render(request, 'view_album.html')
