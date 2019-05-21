@@ -263,7 +263,7 @@
                             <img id="im" class="img-circle" src="{{ user_figure }}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><a href="{% url 'user' %}">个人中心</a></li>
+                            <li><a href="/user/{{user_id}}/">个人中心</a></li>
                             <li><a href="{% url 'setting' %}">设置</a></li>
                             <li><a href="{% url 'logout' %}">退出登录</a></li>
                         </ul>

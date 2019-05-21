@@ -19,6 +19,7 @@ album_category_choice = (
         (5, "美食"),
         (6, "纪实"),
         (7, "风景"),
+        (8, "其他"),
 )
 
 def user_photo_directory(instance, filename):
@@ -45,7 +46,7 @@ class Album(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  #拥有者
 
 class Photo(models.Model):
-    name = models.CharField(max_length=16) #
+    name = models.CharField(max_length=50) #
     data = models.ImageField(upload_to=user_photo_directory)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     cover = models.IntegerField(default=0) #是否为album的封面
@@ -62,10 +63,13 @@ class Collection(models.Model): #收藏
 class Favour(models.Model): #点赞
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    viewed = models.BooleanField(default=False)
 
 class AlbumComment(models.Model): #评论
-    content = models.CharField(max_length=100) #评论内容
+    content = models.CharField(max_length=1000) #评论内容
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
-    origin_comment = models.ForeignKey('self', on_delete=models.CASCADE)  #父级评论
+    origin_comment = models.ForeignKey('self', null=True, on_delete=models.SET_NULL)  #父级评论
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time = models.DateTimeField(default=timezone.now)
 
 #---- 社交>

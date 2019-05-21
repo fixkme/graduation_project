@@ -20,6 +20,7 @@ def index(request):
     if request.method == "GET" and user_id:
         try:
             m_user = User.objects.get(pk=user_id)
+            response_data['user_id'] = m_user.pk
             response_data['user_figure'] = m_user.figure.url
             return render(request, 'index.html', response_data)
         except Exception as err:
@@ -99,13 +100,18 @@ def logout(request):
         print("logout ------ ", err)
     return response
 
-def user(request):
+def add(request, a):
+    #c = int(a) + int(b)
+    return HttpResponse(str(a))
 
+def user(request, user_pk):
+
+    user_id = request.session.get('user_id', None)
     respond_data = {}
+    #return HttpResponse(str(user_pk))
     try:
-        user_id = request.session.get('user_id', None)
-        m_user = User.objects.get(pk=user_id)
-        respond_data['user_id'] = user_id
+        m_user = User.objects.get(pk=user_pk)
+        respond_data['user_id'] = user_pk
         respond_data['user_nickname'] = m_user.nickname
         respond_data['user_gender'] = m_user.get_gender_display()
         t = m_user.phone[3:7]
@@ -115,10 +121,11 @@ def user(request):
         respond_data['user_cover'] = m_user.cover
     except Exception as err:
         print("user ---- ", err)
-
+        return render(request, 'user.html')
+    #return HttpResponse(respond_data)
     if request.method == 'GET':
         album_list = []
-        m_user = models.User.objects.get(pk=user_id)
+        m_user = models.User.objects.get(pk=user_pk)
         album_objs = models.Album.objects.filter(user=m_user)
         print("album_objs nums ---- ", len(album_objs))
         for obj in album_objs:
@@ -143,6 +150,7 @@ def user(request):
         respond_data['album_list'] = album_list
         #print(album_list)
         return render(request, 'user.html', respond_data)
+    '''
     if request.is_ajax():
         op = request.GET.get('op')
         print("user ---- ", op)
@@ -158,6 +166,7 @@ def user(request):
             user_data['user_figure'] = m_user.figure.url
             user_data['user_cover'] = m_user.cover
             return HttpResponse(json.dumps(user_data))
+    '''
     return render(request, 'user.html', respond_data)
 
 def setting(request):
@@ -171,6 +180,7 @@ def setting(request):
             try:
                 user_data = {}
                 m_user = User.objects.get(pk=user_id)
+                user_data['user_id'] = user_id
                 user_data['user_nickname'] = m_user.nickname
                 user_data['user_figure'] = m_user.figure.url
                 user_data['user_gender'] = m_user.gender
@@ -284,7 +294,7 @@ def issue(request):
     return render(request, 'issue.html')
 
 def view_album(request, album_id):
-    print('view_album', album_id)
+    #print('view_album', album_id)
     response_data = dict()
     user_data = dict()
     album_data = dict()
@@ -302,6 +312,7 @@ def view_album(request, album_id):
         for tag in tags:
             album_tags_list.append(tag)
 
+        user_data['user_id'] = m_user.pk
         user_data['user_nickname'] = m_user.nickname
         user_data['user_figure'] = m_user.figure.url
         user_data['user_signature'] = m_user.signature

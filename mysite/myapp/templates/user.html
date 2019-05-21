@@ -320,7 +320,7 @@
                             <img id="figure" class="img-circle" src="{{ user_figure }}">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><a href="{% url 'user' %}">个人中心</a></li>
+                            <li><a href="/user/{{user_id}}/">个人中心</a></li>
                             <li><a href="{% url 'setting' %}">设置</a></li>
                             <li><a href="{% url 'logout' %}">退出登录</a></li>
                         </ul>
@@ -336,11 +336,11 @@
     </nav>
 
     <div id="userCover">
-        <a href="" id="cover">
+        <a id="cover">
             <img id="im" src="{{ user_cover }}" alt="img" >
         </a>
         <div id="profile">
-            <a><img src="{{ user_figure }}" class="img-circle"></a>
+            <a href="/user/{{user_id}}/"><img src="{{ user_figure }}" class="img-circle"></a>
             <span>
                 <div>
                     <span>{{ user_nickname }}</span>
@@ -456,7 +456,7 @@
 </div>
 <script>
     $(document).ready(function(){
-
+/*
         //页面加载完毕后加载数据
         var tds = $("#user-info td");
         $.ajax({ url: "user/",  type:'GET',async:false,
@@ -478,7 +478,7 @@
 
             }
         });
-
+*/
         //
     });
 
