@@ -296,6 +296,7 @@ def issue(request):
 def view_album(request, album_id):
     #print('view_album', album_id)
     response_data = dict()
+    self_data = dict()
     user_data = dict()
     album_data = dict()
     user_id = request.session.get('user_id')
@@ -322,7 +323,7 @@ def view_album(request, album_id):
         album_data['album_category'] = album.get_category_display()
         album_data['album_note'] = album.note
         album_data['album_photo_num'] = len(photos)
-        album_data['album_view_num'] = 0
+        album_data['album_view_num'] = 1
         album_data['album_comment_num'] = 0
         album_data['album_favour_num'] = 0
 

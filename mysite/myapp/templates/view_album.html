@@ -328,7 +328,11 @@
         display: inline-block;
     }
 
-    /*------------------- coment ----------------------*/
+    .glyphicon-thumbs-up:hover, .glyphicon-heart:hover {
+        cursor: pointer;
+    }
+
+    /*------------------- comment ----------------------*/
     #comment-input {
         width: 100%;
     }
@@ -339,6 +343,69 @@
     }
 
     #comment-input button:hover {
+        background-color: #43b130;
+        border-color: #43b130;
+    }
+    .comment-item {
+        width: 100%;
+    }
+
+    .comment-item > a {
+        display: inline;
+        position: absolute;
+        cursor: pointer;
+    }
+
+    .comment-body {
+        display: block;
+        margin-left: 50px;
+    }
+
+    .comment-reply {
+        width: 100%;
+        padding-left: 20px;
+        margin-top: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .comment-reply-btn, .comment-del-btn {
+        color: #46d233;
+        cursor: pointer;
+        margin-right: 20px;
+    }
+
+    .comment-nick, .reply-nick, .to-nick {
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .comment-time {
+        margin-left: 20px;
+        color: #999;
+    }
+
+    .reply-input {
+        margin-bottom: 20px;
+    }
+
+    .reply-input > textarea {
+        width: 100%;
+    }
+
+    .comment-cancel {
+        color: #46d233;
+        cursor: pointer;
+        margin-right: 20px;
+    }
+
+    .comment-sure {
+        background-color: #46d233;
+        border-color: #46d233;
+
+    }
+
+    .comment-sure:hover {
         background-color: #43b130;
         border-color: #43b130;
     }
@@ -389,7 +456,7 @@
                         <li><a href="#">收藏</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
+                <li id="self" class="dropdown">
                     <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
                         <img id="figure" class="img-circle" src="{{ user_data.user_figure }}">
                     </a>
@@ -480,6 +547,7 @@
             <div><span class="glyphicon glyphicon-eye-open"></span> <span>{{album_data.album_view_num}}</span></div>
             <div><span class="glyphicon glyphicon-comment"></span> <span>{{album_data.album_comment_num}}</span></div>
             <div><span class="glyphicon glyphicon-book"></span> <span>{{ album_data.album_photo_num }}</span></div>
+            <div><span class="glyphicon glyphicon-heart"></span> <span>收藏</span></div>
         </div>
         <hr style="border-color: #e2e2e2">
         <div>标题：<span>{{album_data.album_name}}</span></div>
@@ -509,87 +577,22 @@
             <button type="button" class="btn btn-primary">确认评论</button>
         </form>
         <br><br>
-        <h4>评论</h4>
+        <h4 id="comment-h4">评论</h4>
 
-        <style>
-            .comment-item {
-                width: 100%;
-            }
-
-            .comment-item > a {
-                display: inline;
-                position: absolute;
-                cursor: pointer;
-            }
-
-            .comment-body {
-                display: block;
-                margin-left: 50px;
-            }
-
-            .comment-reply {
-                width: 100%;
-                padding-left: 20px;
-                margin-top: 10px;
-                background-color: #f9f9f9;
-            }
-
-            .comment-reply-btn, .comment-del-btn {
-                color: #46d233;
-                cursor: pointer;
-                margin-right: 20px;
-            }
-
-            .comment-nick, .reply-nick, .to-nick {
-                color: black;
-                font-weight: bold;
-                cursor: pointer;
-            }
-
-            .comment-time {
-                margin-left: 20px;
-                color: #999;
-            }
-
-            .reply-input {
-                margin-bottom: 20px;
-            }
-
-            .reply-input > textarea {
-                width: 100%;
-            }
-
-            .comment-cancel {
-                color: #46d233;
-                cursor: pointer;
-                margin-right: 20px;
-            }
-
-            .comment-sure {
-                background-color: #46d233;
-                border-color: #46d233;
-
-            }
-
-            .comment-sure:hover {
-                background-color: #43b130;
-                border-color: #43b130;
-            }
-        </style>
         <hr>
         <div class="comment-item">
-            <a><img class="img-circle" src="{{ user_data.user_figure }}" width="40px" height="40px"></a>
+            <a><img class='img-circle' src="{% static '/img/4.jpg' %}" width='40px' height='40px'></a>
             <div class="comment-body">
                 <p>
-                    <a class="comment-nick">昵称</a>
+                    <a class="comment-nick">月雪纷飞</a>
                     <span class="comment-time">2018-5-22</span>
                 </p>
-                <p class="comment-content">评论内容评论内容评论内容</p>
+                <p class="comment-content">图片挺好看的啊</p>
                 <p>
                     <span class="comment-reply-btn">回复</span>
                     <span class="comment-del-btn">删除</span>
                 </p>
-
+                <!--
                 <div class="reply-input">
                     <textarea rows="3"></textarea>
                     <div>
@@ -611,39 +614,32 @@
                         <span class="comment-del-btn">删除</span>
                     </p>
                 </div>
-                <div class="comment-reply">
-                    <p>
-                        <a class="reply-nick">昵称</a>
-                        <span> @ </span>
-                        <a class="to-nick">昵称</a>
-                        <span class="comment-time">2018-5-22</span>
-                    </p>
-                    <p class="reply-content">回复回复回复</p>
-                    <p>
-                        <span class="comment-reply-btn">回复</span>
-                        <span class="comment-del-btn">删除</span>
-                    </p>
-                </div>
+                -->
             </div>
         </div>
-
-        <hr>
-        <div class="comment-item">
-            <a><img class="img-circle" src="{{ user_data.user_figure }}" width="40px" height="40px"></a>
-            <div class="comment-body">
-                <span class="comment-nick"><a>昵称</a></span>
-                <span class="comment-time">2018-5-22</span>
-                <p class="comment-content">评论内容</p>
-                <div>
-                    <span>回复</span>
-                    <span>删除</span>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
 
 <script>
+
+    function delComment($p) {
+        var $obj = $p;
+        if ($obj.hasClass('comment-reply')) {
+        } else {
+            $obj = $obj.parent();
+            var $pre = $obj.prev();
+            $pre.remove();
+        }
+        var r = confirm("是否确定删除该评论？");
+        if (r) {
+            $obj.hide(500, function () {
+                $obj.remove();
+            });
+        } else {
+        }
+    }
+
     function replyBtnCall($p) {
         var $cancel = $("<span class='comment-cancel'>取消</span>");
         var $sure = $("<button class='comment-sure' type='button'>评论</button>");
@@ -663,30 +659,16 @@
                 $(this).remove()
             });
         });
-        //回复事件
+        //确认回复事件
         $sure.click(function () {
             //alert($(".reply-input>textarea").val());
             var $pp = $sure.parent().parent();
-            /*
-            $pp.before("<div class=\"comment-reply\">\n" +
-                "                    <p>\n" +
-                "                        <a class=\"reply-nick\">昵称</a>\n" +
-                "                         <span> @ </span>\n" +
-                "                        <a class=\"comment-nick\">昵称</a>\n" +
-                "                        <span class=\"comment-time\">2018-5-22</span>\n" +
-                "                    </p>\n" +
-                "                    <p class=\"reply-content\">回复回复回复</p>\n" +
-                "                    <p>\n" +
-                "                        <span class=\"comment-reply-btn\">回复</span>\n" +
-                "                        <span class=\"comment-del-btn\">删除</span>\n" +
-                "                    </p>\n" +
-                "                </div>");
-
-             */
             var selfNick = $("#user-nick").text();
             var oppoNick = $pp.parent().children("p").get(0).children[0].innerText;
             var content = $pp.children('textarea').get(0).value;
-
+            if (content == "" || content == null){
+                return false;
+            }
             var $p1 = $("<p></p>");
             $p1.append($("<a class='reply-nick'></a>").text(selfNick));
             $p1.append(" @ ");
@@ -695,15 +677,22 @@
             var $p2 = $("<p class='reply-content'></p>");
             $p2.text(content);
             var $btnReply = $("<span class='comment-reply-btn'>回复</span>");
-            var $btnCancel = $("<span class='comment-del-btn'>删除</span>");
+            var $btnDel = $("<span class='comment-del-btn'>删除</span>");
             var $p3 = $("<p></p>");
             $p3.append($btnReply);
-            $p3.append($btnCancel);
+            $p3.append($btnDel);
             var $reply = $("<div class='comment-reply'></div>");
             $reply.append($p1);
             $reply.append($p2);
             $reply.append($p3);
-            $pp.before($reply);
+
+            var $ppp = $pp.parent();
+            if ($ppp.hasClass("comment-reply")) {
+                $ppp.parent().append($reply);
+            } else {
+                $ppp.append($reply);
+            }
+            //$pp.before($reply);
             //回复按钮事件
             $btnReply.click(function () {
                 var $mp = $(this).parent();
@@ -713,9 +702,11 @@
                 replyBtnCall($mp);
             });
             //删除事件
-
-            //alert(content);
-            //输入框消失
+            $btnDel.click(function () {
+                var $pp = $(this).parent().parent();
+                delComment($pp);
+            });
+            //确认评论后输入框消失
             $pp.hide(500, function () {
                 $pp.remove();
             });
@@ -723,6 +714,54 @@
     }
 
     $(document).ready(function () {
+        //评论图册
+        $("#comment-input>button").click(function () {
+            var content = $("#comment-input>div>textarea").val();
+            if (content == "" || content == null){
+                return false;
+            }
+            var figureurl = $("#figure").attr('src');
+            var userurl = $("#self>li:first-child>a").attr('href');
+            var nick = "dfbshfb";
+            //alert(content);
+            var $a = $("<a></a>");
+            $a.attr('href', userurl);
+            $a.append($("<img class='img-circle' width='40px' height='40px'>")
+                .attr('src', figureurl));
+            var $p1 = $("<p></p>");
+            $p1.append($("<a class='comment-nick'></a>").text(nick));
+            $p1.append($("<span class='comment-time'></span>").text("刚才"));
+            var $p2 = $("<p class='comment-content'></p>");
+            $p2.text(content);
+            var $replyBtn = $("<span class='comment-reply-btn'>回复</span>");
+            var $delBtn = $("<span class='comment-del-btn'>删除</span>");
+            var $p3 = $("<p></p>");
+            $p3.append($replyBtn);
+            $p3.append($delBtn);
+            var $comBody = $("<div class='comment-body'></div>");
+            $comBody.append($p1);
+            $comBody.append($p2);
+            $comBody.append($p3);
+            var $comItem = $("<div class='comment-item'></div>");
+            $comItem.append($a);
+            $comItem.append($comBody);
+            $("#comment-h4").after($comItem);
+            $("#comment-h4").after($("<hr>"));
+            $replyBtn.click(function () {
+                var $p = $(this).parent();
+                if ($p.next().hasClass("reply-input")) {
+                    return false;
+                }
+                replyBtnCall($p);
+            });
+            $delBtn.click(function () {
+                var $pp = $(this).parent().parent();
+                delComment($pp);
+            });
+            //清空内容
+            $("#comment-input>div>textarea").val("");
+        });
+
         //回复评论
         $(".comment-reply-btn").click(function () {
             var $p = $(this).parent();
@@ -731,12 +770,32 @@
             }
             replyBtnCall($p);
         });
+        ///删除
+        $(".comment-del-btn").click(function () {
+            var $pp = $(this).parent().parent();
+            delComment($pp);
+        });
         //取消评论
         $(".comment-cancel").click(function () {
             var $p = $(this).parent().parent();
             $p.hide(500, function () {
                 $(this).remove()
             });
+        });
+
+        //点赞
+        var thumbsUp = false;
+        $(".glyphicon-thumbs-up").click(function () {
+            //alert($(this).css('color'));
+            if ($(this).css('color') == 'rgb(255, 0, 0)') {
+                return false;
+            }
+            $(this).css('color', 'red');
+            var $numElem = $(this).next();
+            var num = new Number($numElem.text().trim());
+            num++;
+            $numElem.text(num.toString());
+            thumbsUp = true;
         });
     });
 </script>

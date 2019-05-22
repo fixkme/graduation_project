@@ -98,7 +98,6 @@
         position: absolute;
         transform:translate(50px,-160px);
         z-index: 2;
-        border: 1px red solid;
         cursor: pointer;
     }
     #profile img{
@@ -170,7 +169,6 @@
     }
     /*-----------------------------------相册------------------------------------ */
     #album{
-        border: solid 1px #e2131a;
         margin: 0 5% 0 5%;
     }
     #album>div{
@@ -182,6 +180,7 @@
         display: inline-block;
         margin: 30px 20px 0 0 ;
         background-color: white;
+        box-shadow:0 0 10px 1px rgba(0, 0, 0, 0.5);
     }
     .album-cover{
         display: inline-block;
@@ -361,8 +360,8 @@
 
     <div id="catalog">
         <ul id="myTab" class="nav nav-pills">
-            <li class="active"><a href="#album" data-toggle="tab">相册</a></li>
-            <li><a href="#collect" data-toggle="tab">收藏</a></li>
+            <li class="active"><a href="#album" data-toggle="tab">收藏</a></li>
+            <li><a href="#collect" data-toggle="tab">相册</a></li>
             <li><a href="#user-info" data-toggle="tab">资料</a></li>
         </ul>
         <div id="tabContent" class="tab-content">
@@ -456,6 +455,20 @@
 </div>
 <script>
     $(document).ready(function(){
+        //点赞
+        var thumbsUp = false;
+        $(".glyphicon-thumbs-up").click(function () {
+            //alert($(this).css('color'));
+            if ($(this).css('color') == 'rgb(255, 0, 0)') {
+                return false;
+            }
+            $(this).css('color', 'red');
+            var $numElem = $(this).next();
+            var num = new Number($numElem.text().trim());
+            num++;
+            $numElem.text(num.toString());
+            thumbsUp = true;
+        });
 /*
         //页面加载完毕后加载数据
         var tds = $("#user-info td");
