@@ -1,6 +1,7 @@
 from django.shortcuts import render,render_to_response
 from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 import json, os
 import myapp.models as models
@@ -27,10 +28,35 @@ def index(request):
             print("index ------ ", err)
     return render(request, 'index.html')
 
+@csrf_exempt
 def register(request):
     if request.session.get('logined', None):
         return render(request,'index.html')
-    if request.is_ajax(): #注册验证
+
+    if request.is_ajax():
+        # #注册成功，存储user信息
+        op = request.POST.get("op", None)
+        if op == "register":
+            print('register-nick ',request.POST['nickname'])
+            try:
+                #创建用户
+                m_user = models.User()
+                m_user.nickname = request.POST['nickname']
+                m_user.phone = request.POST['phone']
+                m_user.pwd = request.POST['pwd']
+                m_user.save()
+                #登录
+                request.session['logined'] = 1
+                request.session['user_id'] = m_user.pk
+                request.session['user_nickname'] = m_user.nickname
+                request.session['user_figure'] = m_user.figure.url
+                request.session['user_signature'] = m_user.signature
+                request.session['user_cover'] = m_user.cover
+                return JsonResponse({'ret':'t'})
+            except Exception as err:
+                print("register ------ ", err)
+                return JsonResponse({'ret': 'f'})
+        # 注册字段验证
         field = request.GET.get('field')
         ret = 't' #ture
         exist = False
@@ -44,6 +70,7 @@ def register(request):
             ret = 'f' #false
         msg = {'msg':ret}
         return HttpResponse(json.dumps(msg))
+    '''
     if request.method == 'POST': #注册成功，存储user信息
         try:
             newUser = User()
@@ -51,15 +78,19 @@ def register(request):
             newUser.phone = request.POST['phone']
             newUser.pwd = request.POST['pwd']
             newUser.save()
-            return HttpResponseRedirect(reverse("login"))
+            #return HttpResponseRedirect(reverse("login"))
+            return HttpResponse(json.dumps({'ret': 't'}))
         except Exception as err:
             print("register ------ ",err)
-    return render(request, 'register.html')
+            return HttpResponse(json.dumps({'ret': 'f'}))
+    '''
+    return render(request, 'index.html')
 
 
 def login(request):
     if request.session.get('logined', None):
         return HttpResponseRedirect(reverse('index'))
+    '''
     if request.method == 'POST':
         val = request.POST.get('user')
         try:
@@ -85,7 +116,34 @@ def login(request):
             print("login ---- ", err)
             return render(request, 'login.html',
                          {'msg':'用户名或密码错误', 'username':val, 'pwd':pwd})
-    return render(request, 'login.html')
+    '''
+    if request.is_ajax():
+        response_data = {}
+        val = request.GET.get('user')
+        pwd = request.GET.get('pwd')
+        try:
+            if not val or not pwd:
+                raise
+            if len(val) == 11 and val.isdigit():
+                m_user = User.objects.get(phone=val)
+            else:
+                m_user = User.objects.get(nickname=val)
+            if m_user.pwd == pwd: #登录成功，记录user信息
+                request.session['logined'] = 1
+                request.session['user_id'] = m_user.pk
+                request.session['user_nickname'] = m_user.nickname
+                request.session['user_figure'] = m_user.figure.url
+                request.session['user_signature'] = m_user.signature
+                request.session['user_cover'] = m_user.cover
+                response_data['ret'] = 't'
+                return HttpResponse(json.dumps(response_data))
+            else:
+                raise
+        except Exception as err:
+            print("login ---- ", err)
+            response_data['ret'] = 'f'
+            return HttpResponse(json.dumps(response_data))
+    return render(request, 'index.html')
 
 def logout(request):
     if not request.session.get('logined', None):
@@ -337,3 +395,27 @@ def view_album(request, album_id):
     except Exception as err:
         print("view_album " + str(album_id), err)
         return render(request, 'view_album.html')
+
+def search(request, key):
+    user_id = request.session.get('user_id', None)
+    respond_data = {}
+    user_data = {}
+    album_list = {}
+    # return HttpResponse(str(user_pk))
+    try:
+        m_user = User.objects.get(pk=user_id)
+        respond_data['user_id'] = user_id
+        respond_data['user_nickname'] = m_user.nickname
+        respond_data['user_figure'] = m_user.figure.url
+    except Exception as err:
+        print("search ---- ", err)
+        return render(request, 'index.html')
+    # return HttpResponse(respond_data)
+    if request.method == 'GET':
+        album_list = []
+
+        return render(request, 'search.html', respond_data)
+
+def message(request):
+
+    return render(request, 'message.html')

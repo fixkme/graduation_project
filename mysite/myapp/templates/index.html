@@ -114,12 +114,25 @@
         margin-left: 15px;
         vertical-align: middle;
     }
+    #login{
+        cursor: pointer;
+        font-size: 120%;
+        color: white;
+    }
+    .active #login{
+        color: black;
+        transition: color 1s;
+        -moz-transition: color 1s; /* Firefox 4 */
+        -webkit-transition: color 1s; /* Safari 和 Chrome */
+        -o-transition: color 1s; /* Opera */
+    }
     #register{
         background-color: #46d233;
         color: #FFFFFF;
         margin: 9px 15px 0 0;
         padding-top: 7px;
         padding-bottom: 7px;
+        cursor: pointer;
     }
     /*-----------------------------------滚动横幅------------------------------------ */
     .item {
@@ -242,7 +255,7 @@
                                     </select>
                                     <input type="text" class="form-control" placeholder="Search">
                                 </p>
-                                <span class="glyphicon glyphicon-search input-group-btn"></span>
+                                <a href="{% url 'search' 'key' %}"><span class="glyphicon glyphicon-search input-group-btn"></span></a>
                             </div>
                         </form>
                     </li>
@@ -252,10 +265,10 @@
                             <span class="glyphicon glyphicon-bell"></span>
                         </p>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li><a href="#">点赞</a></li>
-                            <li><a href="#">评论</a></li>
-                            <li><a href="#">新粉丝</a></li>
-                            <li><a href="#">收藏</a></li>
+                            <li><a href="{% url 'message' %}">点赞</a></li>
+                            <li><a href="{% url 'message' %}">评论</a></li>
+                            <li><a href="{% url 'message' %}">新粉丝</a></li>
+                            <li><a href="{% url 'message' %}">收藏</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -270,8 +283,8 @@
                     </li>
                     <li><a href="{% url 'issue' %}" style="margin-right: 25px">发布</a></li>
                     {% else %}
-                    <li><a id="login" href="{% url 'login' %}">登录</a></li>
-                    <li><a id="register" href="{% url 'register' %}">注册</a></li>
+                    <li><a id="login">登录</a></li>
+                    <li><a id="register">注册</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -311,7 +324,7 @@
     <div style="text-align: center;">
         <div class="imgRow">
             <div class="imgCard">
-                <a href="#" class="aa">
+                <a href="/user/19/" class="aa">
                     <img src="{% static '/img/3.jpg' %}" alt="img">
                 </a>
                 <div class="ower">
@@ -518,6 +531,123 @@
     </div>
     -->
 </div>
+
+<style>
+	body, html{
+		width: 100%;
+		height: 100%;
+	}
+    #pop{
+        position: fixed;
+        width: 100%;
+		height: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        margin: auto;
+        background-color: rgba(0, 0, 0, 0.71);
+
+    }
+    #pop .glyphicon-remove{
+        position: absolute;
+        right: 30px;
+        top: 20px;
+        font-size: 150%;
+        color: black;
+        cursor: pointer;
+    }
+	#login-widget, #register-widget{
+		position: absolute;
+		width: 500px;
+		height: 400px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        margin: auto;
+        background-color: white;
+        text-align: center;
+        box-shadow:0 0 10px 1px rgba(250, 252, 255, 0.51);
+	}
+
+    #login-widget form, #register-widget form {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 80px;
+    }
+    #login-widget button, #register-widget button{
+        width:100%;
+    }
+    #register-widget form{
+        width: 50%;
+    }
+    #login-widget form{
+        width: 65%;
+    }
+    #callPwdLink{
+        float:right;
+        display:inline
+    }
+    .tip{
+        color: #AA0000;
+    }
+
+</style>
+<div id="pop">
+    <div id="register-widget">
+        <span class="glyphicon glyphicon-remove"></span>
+        <form class="form-horizontal" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <input id="nickname" type="text" class="form-control" name="nickname" placeholder="昵称" autocomplete="off" required="required">
+            </div>
+            <div class="form-group tip"></div>
+            <div class="form-group">
+                <input id="pwd" type="password" class="form-control" name="pwd" placeholder="密码(6-16个字符，区分大小写)" autocomplete="off" required="required">
+            </div>
+            <div class="form-group tip"></div>
+            <div class="form-group">
+                <input id="phone" type="text" class="form-control" name="phone" placeholder="常用手机号" autocomplete="off" required="required">
+            </div>
+            <div class="form-group tip"></div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" >注册</button>
+            </div>
+        </form>
+	</div>
+	<div id="login-widget">
+        <span class="glyphicon glyphicon-remove"></span>
+        <form class="form-horizontal" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" name="user" value="{{username}}" placeholder="昵称/手机号" required="required">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="pwd" value="{{pwd}}" placeholder="密码" required="required">
+            </div>
+            {% if msg %}
+            <div class="form-group alert alert-warning">{{ msg }}</div>
+            {% endif %}
+            <div class="form-group">
+                <div class="checkbox" style="display:inline">
+                    <label>
+                        <input id="checkbox" type="checkbox" />请记住我
+                    </label>
+                </div>
+                <p style="display:inline" class="help-block">不是自己的电脑上不要勾选此项</p>
+                <a id="callPwdLink" href="#">忘记密码？</a>
+            </div>
+            <div class="form-group">
+                <button  id="login-button" type="button" class="btn btn-primary">登录</button>
+            </div>
+        </form>
+	</div>
+
+</div>
+<!-- 顶部导航栏样式 -->
 <script type="text/javascript">
     $(document).ready(function(){
 
@@ -538,7 +668,7 @@
             });
         }
 
-        //////////
+        //滚动条
         $("#inputSearch").hide();
         $("#myCarousel").carousel({
             interval: 3000
@@ -580,7 +710,181 @@
             $(this).children(".dropdown-menu").slideUp(200);
         });
 
-        ////imgCard img
+        //注册按钮
+        $("#register").click(function () {
+            $("#pop").show();
+            $("#login-widget").hide();
+            $("#register-widget").show();
+        });
+        //注册按钮
+        $("#login").click(function () {
+            $("#pop").show();
+            $("#register-widget").hide();
+            $("#login-widget").show();
+        });
+    });
+</script>
+<!-- 弹出框 -->
+<script>
+
+    $("#pop").hide();
+    $(document).ready(function(){
+
+        $("#pop .glyphicon-remove").click(function () {
+            $("#pop").hide(200);//addClass("active-vanish");
+        });
+    });
+</script>
+<!-- 注册验证 -->
+<script>
+
+    ////验证字符串是否是数字
+    function checkNumber(theObj) {
+        var reg = /^[0-9]+.?[0-9]*$/;
+        if (reg.test(theObj)) {
+            return true;
+        }
+        return false;
+    }
+    /////开始
+    $(document).ready(function() {
+        var suceed = new Array(false,false,false);
+        $("#register-widget button").click(function(){
+            if(suceed[0] && suceed[1] && suceed[2]){ //suceed[0] && suceed[1] && suceed[2]
+                var m_data = {};
+                m_data['op'] = "register";
+                m_data['nickname'] = $("#nickname").val().trim();
+                m_data['phone'] = $("#phone").val().trim();
+                m_data['pwd'] = $("#pwd").val().trim();
+                m_data["csrfmiddlewaretoken"] = $('[name="csrfmiddlewaretoken"]').val();
+                $.ajax({ url: "register/",  type:'POST',async:false, dataType: "json",
+                    data: m_data,
+                    success: function(data){
+                        var ret = data.ret;
+                        if(ret == "t"){
+                            $("#pop").hide(200);
+                            window.location.reload();
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
+                });
+            }
+            else
+                return false;
+        });
+        $("#nickname").blur(function () {
+            var val = $("#nickname").val();
+            if(val == "" || val == null){
+                $(".tip")[0].innerText = "";
+                suceed[0] = false;
+                return false;
+            }
+            $.ajax({ url: "register/",  type:'GET',async:false,
+                data: {"field":"nickname","nickname":val},
+                success: function(data){
+                var ret = JSON.parse(data)['msg'];
+                if(ret == "f"){
+                    $(".tip")[0].innerText = "昵称已被取用";
+                    suceed[0] = false;
+                }else{
+                    $(".tip")[0].innerText = "";
+                    suceed[0] = true;
+                }
+            }});
+        });
+        $("#pwd").blur(function() {
+            var pwd = $("#pwd").val();
+            if(pwd.length == "" || pwd == null){
+                $(".tip")[1].innerText = "";
+                suceed[1] = false;
+                return false;
+            }
+            if(pwd.length < 6 || pwd.length > 16){
+                $(".tip")[1].innerText = "密码为6-16个字符";
+                suceed[1] = false;
+            }else{
+                $(".tip")[1].innerText = "";
+                suceed[1] = true;
+            }
+        });
+        $("#phone").blur(function() {
+            var val = $(this).val();
+            if(val.length == "" || val == null){
+                $(".tip")[2].innerText = "";
+                suceed[2] = false;
+                return false;
+            }
+            if(val.length != 11 || !checkNumber(val)){
+                $(".tip")[2].innerText = "请检查手机号码";
+                suceed[2] = false;
+            }else {
+                $.ajax({ url: "register/",  type:'GET',async:false,
+                    data: {"field":"phone","phone":val},
+                    success: function(data){
+                        var ret = JSON.parse(data)['msg'];
+                        if(ret == "f"){
+                            $(".tip")[2].innerText = "该手机号已经注册过";
+                            suceed[2] = false;
+                        }else{
+                            $(".tip")[2].innerText = "";
+                            suceed[2] = true;
+                        }
+                    }});
+            }
+            //"csrfmiddlewaretoken":$('[name="csrfmiddlewaretoken"]').val()
+        });
+    })
+</script>
+<!-- 登录验证 -->
+<script>
+    function checkBox() {
+        var username=getCookie('username');
+        if (username!=null && username!="")
+        {alert('Welcome again '+username+'!')}
+        else
+        {
+            username=prompt('Please enter your name:',"");
+            if (username!=null && username!="")
+            {
+                setCookie('username',username,365)
+            }
+        }
+    }
+    //开始
+    $(document).ready(function() {
+
+        $("#login-widget input").focus(function() {
+            $(".alert").hide();
+        });
+        //$("#radio").change(checkBox);
+
+        $("#login-widget button").click(function () {
+            var val = $("#login-widget input[name='user']").val().trim();
+            var pwd = $("#login-widget input[name='pwd']").val().trim();
+            if (val == "" || val == null){
+                alert('用户名不许为空');
+                return false;
+            }
+            if (pwd == "" || pwd == null){
+                alert('密码名不许为空');
+                return false;
+            }
+            $.ajax({ url: "login/",  type:'GET',async:false,
+                    data: {"op":"login","user":val,'pwd':pwd},
+                    success: function(data){
+                        var ret = JSON.parse(data)['ret'];
+
+                        if (ret == 't'){
+                            $("#pop").hide(200);
+                            window.location.reload();
+                        }else{
+                            alert("账号或密码错误");
+                        }
+                    }
+            });
+        });
 
     });
 </script>

@@ -346,6 +346,7 @@
         background-color: #43b130;
         border-color: #43b130;
     }
+
     .comment-item {
         width: 100%;
     }
@@ -617,10 +618,105 @@
                 -->
             </div>
         </div>
-        
+
     </div>
 </div>
+<style>
+    #recommand{
+        display: block;
+        width: 80%;
+        margin: 40px 5% 40px 5%;
+    }
+    .album-card{
+        float: none;
+        display: inline-block;
+        margin: 30px 20px 0 0 ;
+        background-color: white;
+        box-shadow:0 0 10px 1px rgba(0, 0, 0, 0.5);
+    }
+    .album-cover{
+        display: inline-block;
+        width: 274px;
+        height: 274px;
+        background-position: center center;
+        background-size: cover;
+        cursor: pointer;
+        /*background-image: url("{% static '/img/3.jpg' %}");*/
+    }
+    .album-info{
+        width: 274px;
+        height: 90px;
+        color: #999;
+    }
+    .album-info>div{
+        margin-top: 10px;
+        margin-left: 2px;
+    }
+    .album-info>div:last-child>div{
+        margin-right: 20px;
+        display: inline;
+    }
+    .album-info>div:last-child>div:last-child{
+        float: right;
+    }
+    .album-info .glyphicon-thumbs-up{
+        cursor: pointer;
+    }
+    .album-name{
+        color: black;
+        font-size: 120%;
+        font-weight: 600;
+    }
+    .album-num{
+        width: 50px;
+        color: #FFFFFF;
+        transform:translate(210px,235px);
+        background-color: rgba(30, 30, 30, 0.5);
+        padding: 4px 4px 4px 4px;
+    }
+    .album-create-time{
+        margin-right: 2px;
+        float: right;
+    }
+    .album-tags{
 
+    }
+    .album-tags>span{
+        background-color: #f0f1f2;
+        border-radius: 15px;
+        padding: 4px 12px 4px 12px;
+        margin: 0 2px 0 0;
+        font-size: 80%;
+    }
+</style>
+<div style="width: 100%; background-color: #f4f6f9;float: left">
+    <div id="recommand">
+    <h4>为你推荐</h4>
+    <div class="album-card">
+                        <a href="/view-album/8/" class="album-cover" style="background-image: url('/media/photo/18/4.jpg');">
+                            <div class="album-num"><span>3</span> <span class="glyphicon glyphicon-book"></span></div>
+                        </a>
+                        <div class="album-info">
+                            <div>
+                                <span class="album-name">斗罗大陆</span>
+                                <span class="album-create-time">2019-05-12</span>
+                            </div>
+                            <div class="album-tags">
+
+                                    <span>头像</span>
+
+                                    <span>斗罗大陆</span>
+
+                            </div>
+                            <div>
+                                <div><span class="glyphicon glyphicon-eye-open"></span> <span>0</span></div>
+                                <div><span class="glyphicon glyphicon-comment"></span> <span>0</span></div>
+                                <div><span class="glyphicon glyphicon-thumbs-up"></span> <span>0</span></div>
+                            </div>
+                        </div>
+                    </div>
+</div>
+</div>
 <script>
 
     function delComment($p) {
@@ -666,7 +762,7 @@
             var selfNick = $("#user-nick").text();
             var oppoNick = $pp.parent().children("p").get(0).children[0].innerText;
             var content = $pp.children('textarea').get(0).value;
-            if (content == "" || content == null){
+            if (content == "" || content == null) {
                 return false;
             }
             var $p1 = $("<p></p>");
@@ -717,7 +813,7 @@
         //评论图册
         $("#comment-input>button").click(function () {
             var content = $("#comment-input>div>textarea").val();
-            if (content == "" || content == null){
+            if (content == "" || content == null) {
                 return false;
             }
             var figureurl = $("#figure").attr('src');

@@ -10,6 +10,17 @@ gender_choice = (
     (2, "女"),
 )
 
+access_rank =(
+    (0, "所有人"),
+    (1, "关注的人"),
+    (2, "仅自己"),
+)
+
+copyright_rank = (
+    (0, "随意"),
+    (1, "不能下载"),
+)
+
 album_category_choice = (
         (0, "生活"),
         (1, "人像"),
@@ -50,6 +61,7 @@ class Photo(models.Model):
     data = models.ImageField(upload_to=user_photo_directory)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     cover = models.IntegerField(default=0) #是否为album的封面
+    label = models.IntegerField(null=True, blank=True)
 
 class AlbumTag(models.Model): #相册的标签
     name = models.CharField(max_length=8) #
@@ -59,6 +71,7 @@ class AlbumTag(models.Model): #相册的标签
 class Collection(models.Model): #收藏
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    viewed = models.BooleanField(default=False)
 
 class Favour(models.Model): #点赞
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -69,7 +82,7 @@ class AlbumComment(models.Model): #评论
     content = models.CharField(max_length=1000) #评论内容
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     origin_comment = models.ForeignKey('self', null=True, on_delete=models.SET_NULL)  #父级评论
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, null=False,on_delete=models.CASCADE)
+    time = models.DateTimeField(null=True, default=timezone.now)
 
 #---- 社交>

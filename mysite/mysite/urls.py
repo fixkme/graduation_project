@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^alter_pwd/', views.alter_pwd, name='alter_pwd'),
     url(r'^issue/', views.issue, name='issue'),
     path(r"view-album/<int:album_id>/",views.view_album, name='view_album'),
+    path("search/<str:key>", views.search, name="search"),
+    url("^message/", views.message, name="message"),
     url(r'^media/(?P<path>.*)', serve, {"document_root":settings.MEDIA_ROOT}),
     #url(r'^media/user_figures/(?P<path>.*)', serve, {'document_root':settings.MEDIA_ROOT+'/user_figures'}),
 ] #+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

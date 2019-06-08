@@ -1,0 +1,487 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ request.session.user_nickname }}的消息{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<style type="text/css">
+    /*-----------------------------------top  navbar------------------------------------ */
+    a:hover {
+        text-decoration: none;
+    }
+
+    #logo {
+        margin-left: 30px;
+        height: 90%;
+        width: 70%;
+    }
+
+    #topNav {
+        background-color: rgba(255, 255, 255, 1);
+        border: none;
+        margin: 0;
+    }
+
+    #topNav .navbar-nav > li > a:link {
+        font-size: 120%;
+        color: #000000;
+    }
+
+    #topNav .navbar-nav > li > a:visited {
+        color: #000000;
+    }
+
+    #topNav .navbar-nav > li > a:hover {
+        color: #46d233;
+    }
+
+    #inputSearch > input, #inputSearch > select {
+        border: none;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: none;
+        border-radius: 0;
+        color: #000000;
+    }
+
+    #inputSearch select {
+        cursor: pointer;
+    }
+
+    #inputSearch select > option {
+        color: #919191;
+        background-color: #ffffff;
+    }
+
+    #topNav .glyphicon-search {
+        font-size: 150%;
+        color: #000000;
+        cursor: pointer;
+        padding: 7px 0px 7px 5px;
+    }
+
+    #topNav .glyphicon-bell {
+        font-size: 150%;
+        color: #000000;
+        cursor: pointer;
+        margin-left: 15px;
+    }
+
+    #topNav .img-circle {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    #topNav .dropdown-menu {
+        min-width: 100px;
+    }
+
+    #topNav .dropdown-menu li a:hover {
+        background-color: inherit;
+        color: #46d233;
+    }
+
+    #topNav .navbar-nav li {
+        margin-left: 15px;
+        vertical-align: middle;
+    }
+
+    #register {
+        background-color: #46d233;
+        color: #000000;
+        margin: 9px 15px 0 0;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    /*-----------------------------------left  navbar------------------------------------ */
+    body {
+        background-color: #f4f6f9;
+    }
+
+    #leftNav {
+        background-color: #FFFFFF;
+    }
+
+    ul.nav-tabs {
+        width: 180px;
+        margin-top: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    ul.nav-tabs li {
+        margin: 0;
+        border-top: 1px solid #ddd;
+    }
+
+    ul.nav-tabs li:first-child {
+        border-top: none;
+    }
+
+    ul.nav-tabs li a {
+        color: black;
+        margin: 0;
+        padding: 20px 16px;
+        border-radius: 0;
+    }
+
+    ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover {
+
+        border: 2px solid #46d233;
+    }
+
+    ul.nav-tabs li:first-child a {
+        border-radius: 4px 4px 0 0;
+    }
+
+    ul.nav-tabs li:last-child a {
+        border-radius: 0 0 4px 4px;
+    }
+
+    ul.nav-tabs.affix {
+        top: 0; /* Set the top position of pinned element */
+    }
+
+    /******************************* 个人资料  账号密码 隐私************************************/
+    #section-1, #section-2, #section-3 {
+        background-color: #FFFFFF;
+        padding: 0 32px 16px 32px;
+    }
+
+    #section-1 h2, #section-2 h2, #section-3 h2 {
+        padding-top: 20px;
+    }
+
+    #section-1 form, #section-2 form, #section-3 form {
+        width: 50%;
+    }
+
+    #section-1 > form > div, #section-2 > form > div {
+        margin-bottom: 20px;
+    }
+
+    #section-1 > form > button, #section-2 > form > button, #section-3 > form > button {
+        background-color: #46d233;
+        border: none;
+    }
+
+    #section-1 > form > button:hover, #section-2 > form > button:hover, #section-3 > form > button:hover {
+        background-color: #43b130;
+    }
+
+    #section-1 > form input[value="male"], #section-1 > form input[value="female"] {
+        margin-left: 30px;
+    }
+
+    #portrait {
+        z-index: 2;
+        position: absolute;
+        transform: translate(550px, -210px);
+        text-align: center;
+    }
+
+    #portrait label {
+        position: relative;
+    }
+
+    #btnUpload:hover {
+        cursor: pointer;
+    }
+
+    #imgInput {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0.0;
+    }
+
+    #imgPreview {
+        width: 150px;
+        height: 150px;
+    }
+
+    #section-1 p {
+        color: #999;
+        font-size: 150%;
+        margin-top: 100px;
+    }
+</style>
+
+<style>
+    .favior-item{
+        margin-top: 50px;
+    }
+</style>
+<nav id="topNav" class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img id="logo" src="{% static '/img/icon1.png' %}">
+            </a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a class="nav-elem" href="{% url 'index' %}">首页</a></li>
+                <li><a class="nav-elem" href="#">动态</a></li>
+                <li><a class="nav-elem" href="#">APP</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <p id="inputSearch">
+                                <select class="form-control">
+                                    <option value="volvo">作品</option>
+                                    <option value="saab">用户</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="Search">
+                            </p>
+                            <span class="glyphicon glyphicon-search input-group-btn"></span>
+                        </div>
+                    </form>
+                </li>
+                {% if request.session.logined %}
+                <li class="dropdown">
+                    <p style="padding: 15px 10px 5px 10px" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-bell"></span>
+                    </p>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="#">点赞</a></li>
+                        <li><a href="#">评论</a></li>
+                        <li><a href="#">新粉丝</a></li>
+                        <li><a href="#">收藏</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a style="padding-bottom:15px; padding-top: 10px;" class="dropdown-toggle" data-toggle="dropdown">
+                        <img id="figure" class="img-circle" src="{{ request.session.user_figure }}">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-left">
+                        <li><a href="/user/{{request.session.user_id}}/">个人中心</a></li>
+                        <li><a href="{% url 'setting' %}">设置</a></li>
+                        <li><a href="{% url 'logout' %}">退出登录</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" style="margin-right: 25px">发布</a></li>
+                {% else %}
+                <li><a id="login" href="">登录</a></li>
+                <li><a id="register" href="">注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<body data-spy="scroll" data-target="#myScrollspy">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3" id="myScrollspy">
+            <ul class="nav nav-tabs nav-stacked" id="leftNav">
+                <li class="active"><a href="#section-1">点赞</a></li>
+                <li><a href="#section-2">收藏</a></li>
+                <li><a href="#section-3">评论</a></li>
+                <li><a href="#section-4">新粉丝</a></li>
+            </ul>
+        </div>
+        <div class="col-xs-9">
+            <div id="section-1">
+                <div class="favior-item">
+                    <div id="profile">
+                        <a href="/user/19/"><img src="/media/user_figures/9.png" class="img-circle" width="40px" height="40px"></a>
+                        <span>
+                            <div>
+                                <span>月雪纷飞</span>
+                                <span>点赞了你的图册</span>
+                            </div>
+                            <div>
+                                <span>2019-5-25</span>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div id="section-2">
+                <div class="favior-item">
+
+                </div>
+            </div>
+            <div id="section-3">
+                <div class="favior-item">
+
+                </div>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
+<br/>
+</body>
+<script>
+    $(document).ready(function () {
+
+        //页面加载完毕后加载数据
+        $.ajax({
+            url: "setting/", type: 'GET', async: false,
+            data: {"op": "load_user_data"},
+            success: function (response_data) {
+                var user_data = JSON.parse(response_data);
+                $("#nickname").attr('value', user_data['user_nickname']);
+                $("#signature").attr('value', user_data['user_signature']);
+                $("#imgPreview").attr('src', user_data['user_figure']);
+                $("#figure").attr('src', user_data['user_figure']);
+                var gender = user_data['user_gender'];
+                if (gender == 0)
+                    $(":radio")[0].checked = "checked";
+                else if (gender == 1)
+                    $(":radio")[1].checked = "checked";
+                else
+                    $(":radio")[2].checked = "checked";
+            }
+        });
+        //提交修改的资料
+        $("#section-1-form>button").click(function () {
+            var val = $("#nickname").val();
+            if (val == "" || val == null)
+                return false;
+            var ret = 't';
+            $.ajax({
+                url: "setting/", type: 'GET', async: false,
+                data: {"op": "verify_nickname", "nickname": val},
+                success: function (data) {
+                    ret = JSON.parse(data)['ret'];
+                }
+            });
+            //等待ajax执行完
+            if (ret == "f") {
+                alert("昵称已被取用");
+                $("#nickname").val(val);
+                return false;
+            } else if (ret == 't') {
+                $("#section-1-form").submit();
+            }
+        });
+        //验证昵称是否唯一
+        $("#nickname").blur(function () {
+            var val = $("#nickname").val();
+            if (val == "" || val == null)
+                return false;
+            $.ajax({
+                url: "setting/", type: 'GET', async: false,
+                data: {"op": "verify_nickname", "nickname": val},
+                success: function (data) {
+                    var ret = JSON.parse(data)['ret'];
+                    if (ret == "f") {
+                        alert("昵称已被取用");
+                        $("#nickname").val(val);
+                    }
+                }
+            });
+        });
+
+        //提交修改的密码
+        $("#section-2-form>button").click(function () {
+            var oldPwd = $("#oldPwd").val().trim();
+            var newPwd = $("#newPwd").val().trim();
+            var assertPwd = $("#assertPwd").val().trim();
+            if (oldPwd == "" || newPwd == "" || assertPwd == "")
+                return false;
+            var ret = 't';
+            $.ajax({
+                url: "setting/", type: 'GET', async: false,
+                data: {"op": "verify_pwd", "old_pwd": oldPwd},
+                success: function (data) {
+                    ret = JSON.parse(data)['ret'];
+                }
+            });
+            //等待ajax执行完
+            if (ret == "f") {
+                alert("密码错误");
+                return false;
+            } else if (ret == 't') {
+                if (newPwd == assertPwd) {
+                    $("#section-2-form").submit();
+                    alert('修改密码成功');
+                } else {
+                    alert("两次密码不一样 " + newPwd + " " + assertPwd);
+                    return false;
+                }
+            }
+        });
+
+        ///左边导航栏
+        $("#leftNav").affix({
+            offset: {
+                top: 125
+            }
+        });
+
+        //上传头像
+        $("#imgInput").change(function () {
+            var url = null;
+            var imgfile = this.files[0]
+            if (window.createObjectURL != undefined) {//basic
+                url = window.createObjectURL(imgfile);
+            } else if (window.URL != undefined) {//mozilla(firefox)兼容火狐
+                url = window.URL.createObjectURL(imgfile);
+            } else if (window.webkitURL != undefined) {//webkit or chrome
+                url = window.webkitURL.createObjectURL(imgfile);
+            }
+            document.getElementById("imgPreview").src = url;
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //////
+        $("#inputSearch").hide();
+        $("#myCarousel").carousel({
+            interval: 2000
+        });
+
+        ////搜索输入框样式
+        $(".glyphicon-search").click(function (event) {
+            if ($("#inputSearch").is(':visible')) {
+                alert("yyy");
+            }
+            var e = window.event || event;
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else {
+                e.cancelBubble = true;
+            }
+            $("#inputSearch").show(200);
+        });
+        $("#inputSearch").click(function (event) {
+            var e = window.event || event;
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else {
+                e.cancelBubble = true;
+            }
+        });
+        document.onclick = function () {
+            $("#inputSearch").hide(200);
+        };
+
+        ////下拉菜单动画样式
+        $(".glyphicon-bell").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".img-circle").mouseenter(function () {
+            $(this).parent(".dropdown-toggle").next().show(500);
+        });
+        $(".dropdown").mouseleave(function () {
+            $(this).children(".dropdown-menu").slideUp(200);
+        });
+
+    });
+</script>
+
+
+{% endblock %}
